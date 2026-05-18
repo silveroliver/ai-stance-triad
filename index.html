@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Stance Triad</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #eeece7;
+    --text: #2a2927;
+    --muted: #6b6960;
+    --hint: #9e9c94;
+    --border: rgba(42,41,39,0.12);
+    --border2: rgba(42,41,39,0.22);
+    --teal: #1D9E75;
+    --teal-fill: #5DCAA5;
+    --teal-text: #085041;
+    --coral: #D85A30;
+    --coral-fill: #F0997B;
+    --coral-text: #712B13;
+    --purple: #534AB7;
+    --purple-fill: #AFA9EC;
+    --purple-text: #26215C;
+    --radius: 10px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1917;
+      --surface: #242320;
+      --surface2: #2e2c29;
+      --text: #e8e6de;
+      --muted: #a09e96;
+      --hint: #6b6960;
+      --border: rgba(232,230,222,0.1);
+      --border2: rgba(232,230,222,0.2);
+      --teal-text: #9FE1CB;
+      --coral-text: #F5C4B3;
+      --purple-text: #CECBF6;
+    }
+  }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 3rem;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+    max-width: 520px;
+  }
+
+  header h1 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: normal;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  header p {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 580px;
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+
+  .ctrl {
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+  }
+
+  .ctrl label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-family: 'Helvetica Neue', sans-serif;
+    margin-bottom: 6px;
+  }
+
+  .ends {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: var(--hint);
+    margin-top: 3px;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  input[type=range] {
+    width: 100%;
+    accent-color: var(--teal);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 340px;
+    margin-bottom: 1rem;
+  }
+
+  .you-card {
+    font-size: 13px;
+    color: var(--text);
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    font-family: 'Helvetica Neue', sans-serif;
+    line-height: 1.5;
+    min-height: 42px;
+  }
+
+  .you-card span { font-weight: 600; }
+
+  .btns {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+
+  button {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    transition: background .15s;
+  }
+
+  button:hover { background: var(--border); }
+
+  .legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .lswatch {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  footer {
+    margin-top: 2rem;
+    font-size: 11px;
+    color: var(--hint);
+    font-family: 'Helvetica Neue', sans-serif;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AI Stance Triad</h1>
+  <p>Map where your team stands on generative AI across three dimensions: experience, outlook, and ethical feel. Set your sliders and add your position.</p>
+</header>
+
+<div class="card">
+  <div class="controls">
+    <div class="ctrl">
+      <label>Experience</label>
+      <input type="range" id="exp" min="0" max="100" value="50" oninput="update()">
+      <div class="ends"><span>Don't use</span><span>Use regularly</span></div>
+    </div>
+    <div class="ctrl">
+      <label>Outlook</label>
+      <input type="range" id="out" min="0" max="100" value="50" oninput="update()">
+      <div class="ends"><span>Threat</span><span>Opportunity</span></div>
+    </div>
+    <div class="ctrl">
+      <label>Ethical feel</label>
+      <input type="range" id="eth" min="0" max="100" value="50" oninput="update()">
+      <div class="ends"><span>Uncomfortable</span><span>Fine with it</span></div>
+    </div>
+  </div>
+
+  <div class="you-card" id="yc">Move the sliders to place yourself.</div>
+
+  <div class="btns">
+    <button onclick="addPerson()">Add my position ↗</button>
+    <button onclick="clearAll()">Clear all</button>
+  </div>
+
+  <canvas id="c" aria-label="Triangular triad diagram showing AI stance positions"></canvas>
+
+  <div class="legend">
+    <div><span class="lswatch" style="background:#5DCAA5;border:1.5px solid #1D9E75"></span>Ethically comfortable</div>
+    <div><span class="lswatch" style="background:#F0997B;border:1.5px solid #D85A30"></span>Ethically uncomfortable</div>
+    <div><span class="lswatch" style="background:#AFA9EC;border:1.5px solid #7F77DD"></span>Uncertain</div>
+  </div>
+</div>
+
+<footer>Built for team workshops on generative AI principles &middot; Use sliders to register your position</footer>
+
+<script>
+var people = [];
+var letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'.split('');
+var idx = 0;
+var dpr = window.devicePixelRatio || 1;
+var cv = document.getElementById('c');
+var ctx = cv.getContext('2d');
+
+function resize() {
+  var w = cv.offsetWidth;
+  var h = 340;
+  cv.width = w * dpr;
+  cv.height = h * dpr;
+  cv.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+
+function isDark() {
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches;
+}
+
+function colors() {
+  var d = isDark();
+  return {
+    text:    d ? '#e8e6de' : '#2a2927',
+    muted:   d ? '#a09e96' : '#6b6960',
+    axis:    d ? '#3e3c39' : '#d3d1c7',
+    preview: d ? 'rgba(200,198,190,0.15)' : 'rgba(60,58,52,0.07)'
+  };
+}
+
+function triPoint(exp, out, eth, W, H) {
+  var margin = 64;
+  var cx = W / 2;
+  var cy = H / 2 + 10;
+  var r = Math.min(W, H) / 2 - margin;
+  var aE = -Math.PI / 2;
+  var aO = -Math.PI / 2 + 2 * Math.PI / 3;
+  var aT = -Math.PI / 2 + 4 * Math.PI / 3;
+  var eN = exp / 100, oN = out / 100, tN = eth / 100;
+  var sum = eN + oN + tN || 1;
+  var bE = eN/sum, bO = oN/sum, bT = tN/sum;
+  var tipE = { x: cx + r * Math.cos(aE), y: cy + r * Math.sin(aE) };
+  var tipO = { x: cx + r * Math.cos(aO), y: cy + r * Math.sin(aO) };
+  var tipT = { x: cx + r * Math.cos(aT), y: cy + r * Math.sin(aT) };
+  return {
+    x: bE*tipE.x + bO*tipO.x + bT*tipT.x,
+    y: bE*tipE.y + bO*tipO.y + bT*tipT.y,
+    tipE, tipO, tipT, cx, cy, r
+  };
+}
+
+function ethColor(eth) {
+  if (eth >= 65) return { fill: '#5DCAA5', stroke: '#1D9E75', text: isDark() ? '#9FE1CB' : '#085041' };
+  if (eth <= 35) return { fill: '#F0997B', stroke: '#D85A30', text: isDark() ? '#F5C4B3' : '#712B13' };
+  return { fill: '#AFA9EC', stroke: '#7F77DD', text: isDark() ? '#CECBF6' : '#26215C' };
+}
+
+function draw() {
+  var W = cv.width / dpr;
+  var H = cv.height / dpr;
+  var col = colors();
+  ctx.clearRect(0, 0, W, H);
+
+  var ref = triPoint(50, 50, 50, W, H);
+  var tE = ref.tipE, tO = ref.tipO, tT = ref.tipT;
+  var cx = ref.cx, cy = ref.cy;
+
+  // Grid triangles
+  [0.33, 0.66, 1].forEach(function(f, i) {
+    var gE = { x: cx + (tE.x-cx)*f, y: cy + (tE.y-cy)*f };
+    var gO = { x: cx + (tO.x-cx)*f, y: cy + (tO.y-cy)*f };
+    var gT = { x: cx + (tT.x-cx)*f, y: cy + (tT.y-cy)*f };
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(gE.x, gE.y); ctx.lineTo(gO.x, gO.y); ctx.lineTo(gT.x, gT.y);
+    ctx.closePath();
+    ctx.strokeStyle = col.axis;
+    ctx.globalAlpha = i === 2 ? 0.6 : 0.25;
+    ctx.lineWidth = i === 2 ? 1 : 0.5;
+    ctx.stroke();
+    ctx.restore();
+  });
+
+  // Spokes
+  ctx.save();
+  ctx.setLineDash([2, 4]);
+  ctx.strokeStyle = col.axis;
+  ctx.lineWidth = 0.5;
+  ctx.globalAlpha = 0.35;
+  [[tE, cx, cy], [tO, cx, cy], [tT, cx, cy]].forEach(function(p) {
+    ctx.beginPath(); ctx.moveTo(p[0].x, p[0].y); ctx.lineTo(p[1], p[2]); ctx.stroke();
+  });
+  ctx.restore();
+
+  // Corner labels
+  var labelDefs = [
+    { tip: tE, lines: ['Experience', 'Use regularly'], ax: 'center', ox: 0,   oy: -18 },
+    { tip: tO, lines: ['Outlook',    'Opportunity'],    ax: 'right',  ox: -14, oy: 0   },
+    { tip: tT, lines: ['Ethical feel','Comfortable'],  ax: 'left',   ox: 14,  oy: 0   }
+  ];
+  labelDefs.forEach(function(l) {
+    var tx = l.tip.x + l.ox, ty = l.tip.y + l.oy;
+    ctx.save();
+    ctx.textAlign = l.ax;
+    ctx.font = '500 12px "Helvetica Neue", sans-serif';
+    ctx.fillStyle = col.text;
+    ctx.fillText(l.lines[0], tx, ty);
+    ctx.font = '10px "Helvetica Neue", sans-serif';
+    ctx.fillStyle = col.muted;
+    ctx.fillText(l.lines[1], tx, ty + 13);
+    ctx.restore();
+  });
+
+  // People dots
+  people.forEach(function(p) {
+    var pt = triPoint(p.exp, p.out, p.eth, W, H);
+    var ec = ethColor(p.eth);
+    ctx.save();
+    ctx.beginPath(); ctx.arc(pt.x, pt.y, 13, 0, Math.PI*2);
+    ctx.fillStyle = ec.fill; ctx.fill();
+    ctx.strokeStyle = ec.stroke; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.restore();
+    ctx.save();
+    ctx.font = '500 11px "Helvetica Neue", sans-serif';
+    ctx.fillStyle = ec.text;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(p.name, pt.x, pt.y);
+    ctx.restore();
+  });
+
+  // Preview dot
+  var v = vals();
+  var pv = triPoint(v.exp, v.out, v.eth, W, H);
+  var ec = ethColor(v.eth);
+  ctx.save();
+  ctx.beginPath(); ctx.arc(pv.x, pv.y, 15, 0, Math.PI*2);
+  ctx.fillStyle = col.preview; ctx.fill();
+  ctx.strokeStyle = ec.stroke; ctx.lineWidth = 1.5;
+  ctx.setLineDash([3, 3]); ctx.stroke();
+  ctx.restore();
+  ctx.save();
+  ctx.font = '500 10px "Helvetica Neue", sans-serif';
+  ctx.fillStyle = col.muted;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('you', pv.x, pv.y);
+  ctx.restore();
+}
+
+function vals() {
+  return {
+    exp: parseInt(document.getElementById('exp').value),
+    out: parseInt(document.getElementById('out').value),
+    eth: parseInt(document.getElementById('eth').value)
+  };
+}
+
+function update() {
+  draw();
+  var v = vals();
+  var expL = v.exp >= 60 ? 'uses AI regularly' : v.exp <= 40 ? "doesn't use AI" : 'occasional user';
+  var outL = v.out >= 60 ? 'sees it as an opportunity' : v.out <= 40 ? 'sees it as a threat' : 'uncertain in outlook';
+  var ethL = v.eth >= 65 ? 'ethically comfortable' : v.eth <= 35 ? 'ethically uncomfortable' : 'ethically uncertain';
+  document.getElementById('yc').innerHTML = '<span>' + expL + '</span>, <span>' + outL + '</span>, <span>' + ethL + '</span>';
+}
+
+function addPerson() {
+  var v = vals();
+  v.name = letters[idx % letters.length]; idx++;
+  people.push(v); draw();
+}
+
+function clearAll() { people = []; idx = 0; draw(); }
+
+window.addEventListener('resize', resize);
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', resize);
+resize();
+update();
+</script>
+</body>
+</html>
