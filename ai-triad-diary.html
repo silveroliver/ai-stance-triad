@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Stance Triad</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #eeece7;
+    --text: #2a2927;
+    --muted: #6b6960;
+    --hint: #9e9c94;
+    --border: rgba(42,41,39,0.12);
+    --border2: rgba(42,41,39,0.22);
+    --teal: #1D9E75;
+    --teal-fill: #5DCAA5;
+    --teal-text: #085041;
+    --coral: #D85A30;
+    --coral-fill: #F0997B;
+    --coral-text: #712B13;
+    --purple: #534AB7;
+    --purple-fill: #AFA9EC;
+    --purple-text: #26215C;
+    --radius: 10px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1917;
+      --surface: #242320;
+      --surface2: #2e2c29;
+      --text: #e8e6de;
+      --muted: #a09e96;
+      --hint: #6b6960;
+      --border: rgba(232,230,222,0.1);
+      --border2: rgba(232,230,222,0.2);
+      --teal-text: #9FE1CB;
+      --coral-text: #F5C4B3;
+      --purple-text: #CECBF6;
+    }
+  }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 3rem;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+    max-width: 900px;
+  }
+
+  header h1 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: normal;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  header p {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .layout {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 980px;
+    align-items: flex-start;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .log-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    width: 240px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .log-panel-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .log-empty {
+    font-size: 12px;
+    color: var(--hint);
+    font-family: 'Helvetica Neue', sans-serif;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .log-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+
+  .log-entry {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 10px 11px;
+    font-family: 'Helvetica Neue', sans-serif;
+    position: relative;
+  }
+
+  .log-entry-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 5px;
+  }
+
+  .log-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .log-entry-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    padding-right: 18px;
+  }
+
+  .log-entry-meta {
+    font-size: 10px;
+    color: var(--hint);
+    margin-bottom: 5px;
+  }
+
+  .log-entry-note {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .log-entry-delete {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: var(--hint);
+    cursor: pointer;
+    font-size: 15px;
+    padding: 0;
+    line-height: 1;
+    transition: color .15s;
+  }
+  .log-entry-delete:hover { color: var(--coral); background: none; }
+
+  /* Copy button */
+  .copy-btn {
+    width: 100%;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    transition: background .15s, color .15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .copy-btn:hover { background: var(--border); }
+  .copy-btn.copied {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+  }
+  .copy-btn:disabled { opacity: 0.45; cursor: default; }
+
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+
+  .ctrl {
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+  }
+
+  .ctrl label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-family: 'Helvetica Neue', sans-serif;
+    margin-bottom: 6px;
+  }
+
+  .ends {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: var(--hint);
+    margin-top: 3px;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  input[type=range] {
+    width: 100%;
+    accent-color: var(--teal);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 400px;
+    margin-bottom: 1rem;
+  }
+
+  .you-card {
+    font-size: 13px;
+    color: var(--text);
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    font-family: 'Helvetica Neue', sans-serif;
+    line-height: 1.5;
+    min-height: 42px;
+  }
+
+  .you-card span { font-weight: 600; }
+
+  .diary-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+    align-items: stretch;
+  }
+
+  .diary-input {
+    flex: 1;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s;
+  }
+
+  .diary-input::placeholder { color: var(--hint); }
+  .diary-input:focus { border-color: var(--teal); }
+
+  button {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+
+  button.primary {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+  }
+  button.primary:hover { background: #178a64; }
+  button:not(.primary):not(.copy-btn):hover { background: var(--border); }
+
+  .btns {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .personas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .persona {
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .persona-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .persona-desc {
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .persona-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-bottom: 7px;
+  }
+
+  .tag-teal   { background: rgba(93,202,165,0.18); color: var(--teal-text); }
+  .tag-coral  { background: rgba(240,153,123,0.2);  color: var(--coral-text); }
+  .tag-purple { background: rgba(175,169,236,0.2);  color: var(--purple-text); }
+  .tag-amber  { background: rgba(210,150,30,0.15);  color: #6b4800; }
+
+  @media (prefers-color-scheme: dark) {
+    .tag-amber { color: #f5c96a; }
+  }
+
+  .personas-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: 'Helvetica Neue', sans-serif;
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 700px) {
+    .layout { flex-direction: column; }
+    .log-panel { width: 100%; }
+  }
+
+  footer {
+    margin-top: 2rem;
+    font-size: 11px;
+    color: var(--hint);
+    font-family: 'Helvetica Neue', sans-serif;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AI Stance Triad</h1>
+  <p>Map where you stand on generative AI across three dimensions. Log your position over time with a note — watch how your thinking shifts.</p>
+</header>
+
+<div class="layout">
+
+  <div class="card">
+    <div class="controls">
+      <div class="ctrl">
+        <label>Experience</label>
+        <input type="range" id="exp" min="0" max="100" value="50" oninput="update()">
+        <div class="ends"><span>Don't use</span><span>Use regularly</span></div>
+      </div>
+      <div class="ctrl">
+        <label>Outlook</label>
+        <input type="range" id="out" min="0" max="100" value="50" oninput="update()">
+        <div class="ends"><span>Threat</span><span>Opportunity</span></div>
+      </div>
+      <div class="ctrl">
+        <label>Ethical feel</label>
+        <input type="range" id="eth" min="0" max="100" value="50" oninput="update()">
+        <div class="ends"><span>Uncomfortable</span><span>Fine with it</span></div>
+      </div>
+    </div>
+
+    <div class="you-card" id="yc">Move the sliders to place yourself.</div>
+
+    <div class="diary-row">
+      <input type="text" id="note" class="diary-input" placeholder="What's shaping your position right now? (optional)" maxlength="200">
+      <button class="primary" onclick="addEntry()">Log position ↗</button>
+    </div>
+
+    <div class="btns">
+      <button onclick="clearAll()">Clear all</button>
+    </div>
+
+    <canvas id="c" aria-label="Triangular triad diagram showing AI stance positions"></canvas>
+
+    <div class="personas-label">Four common positions</div>
+    <div class="personas">
+      <div class="persona">
+        <div class="persona-tag tag-coral">Wary non-users</div>
+        <div class="persona-name">Haven't used it, see it as a threat</div>
+        <div class="persona-desc">May be protective of their craft or concerned about institutional risk. Need space to voice concerns before any adoption conversation.</div>
+      </div>
+      <div class="persona">
+        <div class="persona-tag tag-teal">Eager explorers</div>
+        <div class="persona-name">Using it and see the opportunity</div>
+        <div class="persona-desc">Likely already experimenting. Risk of moving faster than governance. Need channels and guardrails, not just encouragement.</div>
+      </div>
+      <div class="persona">
+        <div class="persona-tag tag-purple">Cautious observers</div>
+        <div class="persona-name">Not using it but open to possibility</div>
+        <div class="persona-desc">Waiting for more clarity, better tools, or someone to go first. Respond well to safe, low-stakes introductions.</div>
+      </div>
+      <div class="persona">
+        <div class="persona-tag tag-amber">Conflicted users</div>
+        <div class="persona-name">Using it but uneasy</div>
+        <div class="persona-desc">Uneasy about ethics, quality, or what it means for their role. Need the conversation, not just the tool.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="log-panel">
+    <div class="log-panel-title">Your log</div>
+    <div id="log-empty" class="log-empty">No entries yet. Log a position to start tracking your journey.</div>
+    <div class="log-entries" id="log-list"></div>
+    <button class="copy-btn" id="copy-btn" onclick="copySummary()" disabled>
+      <span id="copy-icon">⎘</span>
+      <span id="copy-label">Copy summary</span>
+    </button>
+  </div>
+
+</div>
+
+<footer>Built for team workshops on generative AI principles &middot; Entries are not saved between sessions</footer>
+
+<script>
+var entries = [];
+var dpr = window.devicePixelRatio || 1;
+var cv = document.getElementById('c');
+var ctx = cv.getContext('2d');
+
+var PALETTE = [
+  { fill: '#5DCAA5', stroke: '#1D9E75', text: '#085041', darkText: '#9FE1CB' },
+  { fill: '#7BA7F5', stroke: '#3A6ED8', text: '#1a3a7a', darkText: '#B8CFFB' },
+  { fill: '#F0997B', stroke: '#D85A30', text: '#712B13', darkText: '#F5C4B3' },
+  { fill: '#F5C96A', stroke: '#C8960A', text: '#5a3d00', darkText: '#F5DC9A' },
+  { fill: '#AFA9EC', stroke: '#7F77DD', text: '#26215C', darkText: '#CECBF6' },
+  { fill: '#F07BBB', stroke: '#C43E8A', text: '#6b1040', darkText: '#F5BAD8' },
+  { fill: '#82CFF0', stroke: '#2E9CC8', text: '#0f3d54', darkText: '#B5E5F7' },
+  { fill: '#B5E070', stroke: '#6FA820', text: '#2e4a00', darkText: '#D4F09A' },
+];
+
+function entryColor(idx) {
+  var c = PALETTE[idx % PALETTE.length];
+  return { fill: c.fill, stroke: c.stroke, text: isDark() ? c.darkText : c.text };
+}
+
+function resize() {
+  var w = cv.offsetWidth;
+  var h = 400;
+  cv.width = w * dpr;
+  cv.height = h * dpr;
+  cv.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+
+function isDark() {
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches;
+}
+
+function colors() {
+  var d = isDark();
+  return {
+    text:    d ? '#e8e6de' : '#2a2927',
+    muted:   d ? '#a09e96' : '#6b6960',
+    hint:    d ? '#6b6960' : '#9e9c94',
+    axis:    d ? '#3e3c39' : '#d3d1c7',
+    preview: d ? 'rgba(200,198,190,0.15)' : 'rgba(60,58,52,0.07)'
+  };
+}
+
+function triGeo(W, H) {
+  var labelMargin = 72;
+  var cx = W / 2;
+  var cy = H / 2 + 14;
+  var r = Math.min(W, H) / 2 - labelMargin;
+  var aE = -Math.PI / 2;
+  var aO = -Math.PI / 2 + 2 * Math.PI / 3;
+  var aT = -Math.PI / 2 + 4 * Math.PI / 3;
+  return {
+    cx, cy, r,
+    tipE: { x: cx + r * Math.cos(aE), y: cy + r * Math.sin(aE) },
+    tipO: { x: cx + r * Math.cos(aO), y: cy + r * Math.sin(aO) },
+    tipT: { x: cx + r * Math.cos(aT), y: cy + r * Math.sin(aT) },
+    aE, aO, aT
+  };
+}
+
+function triPoint(exp, out, eth, W, H) {
+  var g = triGeo(W, H);
+  var eN = exp / 100, oN = out / 100, tN = eth / 100;
+  var sum = eN + oN + tN || 1;
+  var bE = eN/sum, bO = oN/sum, bT = tN/sum;
+  return {
+    x: bE*g.tipE.x + bO*g.tipO.x + bT*g.tipT.x,
+    y: bE*g.tipE.y + bO*g.tipO.y + bT*g.tipT.y
+  };
+}
+
+function drawLabel(tip, angle, lines, col) {
+  var push = 28;
+  var lx = tip.x + push * Math.cos(angle);
+  var ly = tip.y + push * Math.sin(angle);
+  var deg = angle * 180 / Math.PI;
+  var align, baseline;
+  if (deg < -60 && deg > -120) { align = 'center'; baseline = 'bottom'; }
+  else if (deg > 90)            { align = 'left';   baseline = 'top'; }
+  else                          { align = 'right';  baseline = 'top'; }
+  ctx.save();
+  ctx.textAlign = align;
+  ctx.textBaseline = baseline;
+  ctx.font = '600 12px "Helvetica Neue", sans-serif';
+  ctx.fillStyle = col.text;
+  ctx.fillText(lines[0], lx, ly);
+  ctx.font = '10px "Helvetica Neue", sans-serif';
+  ctx.fillStyle = col.muted;
+  ctx.fillText(lines[1], lx, ly + (baseline === 'bottom' ? -14 : 15));
+  ctx.restore();
+}
+
+function draw() {
+  var W = cv.width / dpr;
+  var H = cv.height / dpr;
+  var col = colors();
+  ctx.clearRect(0, 0, W, H);
+
+  var g = triGeo(W, H);
+  var tE = g.tipE, tO = g.tipO, tT = g.tipT;
+  var cx = g.cx, cy = g.cy;
+
+  [0.33, 0.66, 1].forEach(function(f, i) {
+    var gE = { x: cx + (tE.x-cx)*f, y: cy + (tE.y-cy)*f };
+    var gO = { x: cx + (tO.x-cx)*f, y: cy + (tO.y-cy)*f };
+    var gT = { x: cx + (tT.x-cx)*f, y: cy + (tT.y-cy)*f };
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(gE.x, gE.y); ctx.lineTo(gO.x, gO.y); ctx.lineTo(gT.x, gT.y);
+    ctx.closePath();
+    ctx.strokeStyle = col.axis;
+    ctx.globalAlpha = i === 2 ? 0.65 : 0.28;
+    ctx.lineWidth = i === 2 ? 1.2 : 0.6;
+    ctx.stroke();
+    ctx.restore();
+  });
+
+  ctx.save();
+  ctx.setLineDash([2, 4]);
+  ctx.strokeStyle = col.axis;
+  ctx.lineWidth = 0.5;
+  ctx.globalAlpha = 0.35;
+  [tE, tO, tT].forEach(function(tip) {
+    ctx.beginPath(); ctx.moveTo(tip.x, tip.y); ctx.lineTo(cx, cy); ctx.stroke();
+  });
+  ctx.restore();
+
+  drawLabel(tE, g.aE, ['Experience', 'Use regularly'], col);
+  drawLabel(tO, g.aO, ['Outlook', 'Opportunity'], col);
+  drawLabel(tT, g.aT, ['Ethical feel', 'Fine with it'], col);
+
+  if (entries.length > 1) {
+    ctx.save();
+    ctx.setLineDash([3, 5]);
+    ctx.strokeStyle = col.muted;
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.35;
+    ctx.beginPath();
+    entries.forEach(function(e, i) {
+      var pt = triPoint(e.exp, e.out, e.eth, W, H);
+      if (i === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+    });
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  entries.forEach(function(e, i) {
+    var pt = triPoint(e.exp, e.out, e.eth, W, H);
+    var ec = entryColor(i);
+    ctx.save();
+    ctx.beginPath(); ctx.arc(pt.x, pt.y, 13, 0, Math.PI*2);
+    ctx.fillStyle = ec.fill; ctx.fill();
+    ctx.strokeStyle = ec.stroke; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.restore();
+    ctx.save();
+    ctx.font = '600 10px "Helvetica Neue", sans-serif';
+    ctx.fillStyle = ec.text;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(e.label, pt.x, pt.y);
+    ctx.restore();
+  });
+
+  var v = vals();
+  var pv = triPoint(v.exp, v.out, v.eth, W, H);
+  ctx.save();
+  ctx.beginPath(); ctx.arc(pv.x, pv.y, 15, 0, Math.PI*2);
+  ctx.fillStyle = col.preview; ctx.fill();
+  ctx.strokeStyle = col.muted; ctx.lineWidth = 1.5;
+  ctx.setLineDash([3, 3]); ctx.stroke();
+  ctx.restore();
+  ctx.save();
+  ctx.font = '500 10px "Helvetica Neue", sans-serif';
+  ctx.fillStyle = col.muted;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('you', pv.x, pv.y);
+  ctx.restore();
+}
+
+function vals() {
+  return {
+    exp: parseInt(document.getElementById('exp').value),
+    out: parseInt(document.getElementById('out').value),
+    eth: parseInt(document.getElementById('eth').value)
+  };
+}
+
+function personaName(v) {
+  var highExp = v.exp >= 55, highOut = v.out >= 55;
+  if (highExp && highOut)   return 'Eager explorer';
+  if (!highExp && !highOut) return 'Wary non-user';
+  if (!highExp && highOut)  return 'Cautious observer';
+  return 'Conflicted user';
+}
+
+function personaSummary(v) {
+  var highExp = v.exp >= 55, highOut = v.out >= 55;
+  var ethL = v.eth >= 65 ? 'ethically comfortable' : v.eth <= 35 ? 'ethically uncomfortable' : 'ethically uncertain';
+  if (highExp && highOut)   return '<span>Eager explorer</span> — using it and sees the opportunity, ' + ethL;
+  if (!highExp && !highOut) return '<span>Wary non-user</span> — hasn\'t used it, sees it as a threat, ' + ethL;
+  if (!highExp && highOut)  return '<span>Cautious observer</span> — not using it but open to possibility, ' + ethL;
+  return '<span>Conflicted user</span> — using it but uneasy, ' + ethL;
+}
+
+function nowLabel() {
+  var d = new Date();
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) +
+    ' ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
+
+function addEntry() {
+  var v = vals();
+  var note = document.getElementById('note').value.trim();
+  var n = entries.length + 1;
+  v.label = String(n);
+  v.note = note;
+  v.time = nowLabel();
+  v.persona = personaName(v);
+  v.colorIdx = entries.length;
+  entries.push(v);
+  document.getElementById('note').value = '';
+  draw();
+  renderLog();
+}
+
+function deleteEntry(i) {
+  entries.splice(i, 1);
+  entries.forEach(function(e, j) { e.label = String(j + 1); e.colorIdx = j; });
+  draw();
+  renderLog();
+}
+
+function renderLog() {
+  var list = document.getElementById('log-list');
+  var empty = document.getElementById('log-empty');
+  var copyBtn = document.getElementById('copy-btn');
+  list.innerHTML = '';
+
+  if (entries.length === 0) {
+    empty.style.display = '';
+    copyBtn.disabled = true;
+    return;
+  }
+
+  empty.style.display = 'none';
+  copyBtn.disabled = false;
+
+  entries.slice().reverse().forEach(function(e, ri) {
+    var i = entries.length - 1 - ri;
+    var ec = entryColor(e.colorIdx);
+    var div = document.createElement('div');
+    div.className = 'log-entry';
+    div.innerHTML =
+      '<button class="log-entry-delete" title="Remove" onclick="deleteEntry(' + i + ')">×</button>' +
+      '<div class="log-entry-header">' +
+        '<div class="log-dot" style="background:' + ec.fill + ';border:1.5px solid ' + ec.stroke + ';color:' + ec.text + '">' + e.label + '</div>' +
+        '<div class="log-entry-label">' + e.persona + '</div>' +
+      '</div>' +
+      '<div class="log-entry-meta">' + e.time + '</div>' +
+      (e.note ? '<div class="log-entry-note">\u201c' + e.note + '\u201d</div>' : '');
+    list.appendChild(div);
+  });
+}
+
+function copySummary() {
+  if (entries.length === 0) return;
+
+  var lines = [];
+  lines.push('AI Stance Triad — position log');
+  lines.push('Generated ' + nowLabel());
+  lines.push('');
+
+  entries.forEach(function(e) {
+    lines.push('[' + e.label + '] ' + e.time + '  ·  ' + e.persona);
+    lines.push('    Experience: ' + e.exp + '/100  Outlook: ' + e.out + '/100  Ethical feel: ' + e.eth + '/100');
+    if (e.note) lines.push('    "' + e.note + '"');
+    lines.push('');
+  });
+
+  // Describe overall direction if more than one entry
+  if (entries.length > 1) {
+    var first = entries[0], last = entries[entries.length - 1];
+    var dExp = last.exp - first.exp;
+    var dOut = last.out - first.out;
+    var dEth = last.eth - first.eth;
+    var moves = [];
+    if (Math.abs(dExp) >= 10) moves.push((dExp > 0 ? 'more' : 'less') + ' experienced (' + (dExp > 0 ? '+' : '') + dExp + ')');
+    if (Math.abs(dOut) >= 10) moves.push((dOut > 0 ? 'more positive' : 'more cautious') + ' in outlook (' + (dOut > 0 ? '+' : '') + dOut + ')');
+    if (Math.abs(dEth) >= 10) moves.push((dEth > 0 ? 'more comfortable' : 'less comfortable') + ' ethically (' + (dEth > 0 ? '+' : '') + dEth + ')');
+    if (moves.length > 0) {
+      lines.push('Overall shift: ' + moves.join(', ') + '.');
+    } else {
+      lines.push('Overall shift: position broadly stable across entries.');
+    }
+    lines.push('');
+  }
+
+  lines.push('---');
+  lines.push('Positions: Wary non-user (low use + threat) · Eager explorer (high use + opportunity)');
+  lines.push('           Cautious observer (low use + opportunity) · Conflicted user (high use + uneasy)');
+
+  var text = lines.join('\n');
+
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.getElementById('copy-btn');
+    var lbl = document.getElementById('copy-label');
+    btn.classList.add('copied');
+    lbl.textContent = 'Copied!';
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      lbl.textContent = 'Copy summary';
+    }, 2000);
+  }).catch(function() {
+    // Fallback for browsers that block clipboard
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var lbl = document.getElementById('copy-label');
+    lbl.textContent = 'Copied!';
+    setTimeout(function() { lbl.textContent = 'Copy summary'; }, 2000);
+  });
+}
+
+function clearAll() {
+  entries = [];
+  draw();
+  renderLog();
+}
+
+function update() {
+  draw();
+  document.getElementById('yc').innerHTML = 'Your position: ' + personaSummary(vals());
+}
+
+document.getElementById('note').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') addEntry();
+});
+
+window.addEventListener('resize', resize);
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', resize);
+resize();
+update();
+</script>
+</body>
+</html>
