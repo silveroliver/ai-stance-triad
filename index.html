@@ -58,7 +58,7 @@
   header {
     text-align: center;
     margin-bottom: 2rem;
-    max-width: 520px;
+    max-width: 580px;
   }
 
   header h1 {
@@ -82,7 +82,7 @@
     border-radius: 16px;
     padding: 1.5rem;
     width: 100%;
-    max-width: 580px;
+    max-width: 620px;
   }
 
   .controls {
@@ -123,10 +123,11 @@
     accent-color: var(--teal);
   }
 
+  /* Canvas gets extra height for labels outside triangle */
   canvas {
     display: block;
     width: 100%;
-    height: 340px;
+    height: 420px;
     margin-bottom: 1rem;
   }
 
@@ -171,6 +172,7 @@
     font-size: 11px;
     color: var(--muted);
     font-family: 'Helvetica Neue', sans-serif;
+    margin-bottom: 1.25rem;
   }
 
   .lswatch {
@@ -180,6 +182,64 @@
     display: inline-block;
     margin-right: 4px;
     vertical-align: middle;
+  }
+
+  /* Persona grid */
+  .personas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .persona {
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .persona-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .persona-desc {
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .persona-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-bottom: 7px;
+  }
+
+  .tag-teal   { background: rgba(93,202,165,0.18); color: var(--teal-text); }
+  .tag-coral  { background: rgba(240,153,123,0.2);  color: var(--coral-text); }
+  .tag-purple { background: rgba(175,169,236,0.2);  color: var(--purple-text); }
+  .tag-amber  { background: rgba(210,150,30,0.15);  color: #6b4800; }
+
+  @media (prefers-color-scheme: dark) {
+    .tag-amber { color: #f5c96a; }
+  }
+
+  .personas-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: 'Helvetica Neue', sans-serif;
+    margin-bottom: 8px;
   }
 
   footer {
@@ -231,6 +291,30 @@
     <div><span class="lswatch" style="background:#F0997B;border:1.5px solid #D85A30"></span>Ethically uncomfortable</div>
     <div><span class="lswatch" style="background:#AFA9EC;border:1.5px solid #7F77DD"></span>Uncertain</div>
   </div>
+
+  <div class="personas-label">Four common positions</div>
+  <div class="personas">
+    <div class="persona">
+      <div class="persona-tag tag-coral">Wary non-users</div>
+      <div class="persona-name">Haven't used it, see it as a threat</div>
+      <div class="persona-desc">May be protective of their craft or concerned about institutional risk. Need space to voice concerns before any adoption conversation.</div>
+    </div>
+    <div class="persona">
+      <div class="persona-tag tag-teal">Eager explorers</div>
+      <div class="persona-name">Using it and see the opportunity</div>
+      <div class="persona-desc">Likely already experimenting. Risk of moving faster than governance. Need channels and guardrails, not just encouragement.</div>
+    </div>
+    <div class="persona">
+      <div class="persona-tag tag-purple">Cautious observers</div>
+      <div class="persona-name">Not using it but open to possibility</div>
+      <div class="persona-desc">Waiting for more clarity, better tools, or someone to go first. Respond well to safe, low-stakes introductions.</div>
+    </div>
+    <div class="persona">
+      <div class="persona-tag tag-amber">Conflicted users</div>
+      <div class="persona-name">Using it but uneasy</div>
+      <div class="persona-desc">Uneasy about ethics, quality, or what it means for their role. Need the conversation, not just the tool.</div>
+    </div>
+  </div>
 </div>
 
 <footer>Built for team workshops on generative AI principles &middot; Use sliders to register your position</footer>
@@ -245,7 +329,7 @@ var ctx = cv.getContext('2d');
 
 function resize() {
   var w = cv.offsetWidth;
-  var h = 340;
+  var h = 420;
   cv.width = w * dpr;
   cv.height = h * dpr;
   cv.style.height = h + 'px';
@@ -262,29 +346,38 @@ function colors() {
   return {
     text:    d ? '#e8e6de' : '#2a2927',
     muted:   d ? '#a09e96' : '#6b6960',
+    hint:    d ? '#6b6960' : '#9e9c94',
     axis:    d ? '#3e3c39' : '#d3d1c7',
     preview: d ? 'rgba(200,198,190,0.15)' : 'rgba(60,58,52,0.07)'
   };
 }
 
-function triPoint(exp, out, eth, W, H) {
-  var margin = 64;
+// Returns triangle geometry. labelMargin is extra space outside the inscribed triangle for labels.
+function triGeo(W, H) {
+  var labelMargin = 72; // space for outside labels
   var cx = W / 2;
-  var cy = H / 2 + 10;
-  var r = Math.min(W, H) / 2 - margin;
-  var aE = -Math.PI / 2;
-  var aO = -Math.PI / 2 + 2 * Math.PI / 3;
-  var aT = -Math.PI / 2 + 4 * Math.PI / 3;
+  var cy = H / 2 + 14;
+  var r = Math.min(W, H) / 2 - labelMargin;
+  var aE = -Math.PI / 2;                      // top: Experience
+  var aO = -Math.PI / 2 + 2 * Math.PI / 3;   // bottom-left: Outlook
+  var aT = -Math.PI / 2 + 4 * Math.PI / 3;   // bottom-right: Ethical feel
+  return {
+    cx, cy, r,
+    tipE: { x: cx + r * Math.cos(aE), y: cy + r * Math.sin(aE) },
+    tipO: { x: cx + r * Math.cos(aO), y: cy + r * Math.sin(aO) },
+    tipT: { x: cx + r * Math.cos(aT), y: cy + r * Math.sin(aT) },
+    aE, aO, aT
+  };
+}
+
+function triPoint(exp, out, eth, W, H) {
+  var g = triGeo(W, H);
   var eN = exp / 100, oN = out / 100, tN = eth / 100;
   var sum = eN + oN + tN || 1;
   var bE = eN/sum, bO = oN/sum, bT = tN/sum;
-  var tipE = { x: cx + r * Math.cos(aE), y: cy + r * Math.sin(aE) };
-  var tipO = { x: cx + r * Math.cos(aO), y: cy + r * Math.sin(aO) };
-  var tipT = { x: cx + r * Math.cos(aT), y: cy + r * Math.sin(aT) };
   return {
-    x: bE*tipE.x + bO*tipO.x + bT*tipT.x,
-    y: bE*tipE.y + bO*tipO.y + bT*tipT.y,
-    tipE, tipO, tipT, cx, cy, r
+    x: bE*g.tipE.x + bO*g.tipO.x + bT*g.tipT.x,
+    y: bE*g.tipE.y + bO*g.tipO.y + bT*g.tipT.y
   };
 }
 
@@ -294,17 +387,49 @@ function ethColor(eth) {
   return { fill: '#AFA9EC', stroke: '#7F77DD', text: isDark() ? '#CECBF6' : '#26215C' };
 }
 
+function drawLabel(tip, angle, lines, col) {
+  // Push label outward from triangle tip along the outward normal
+  var push = 28;
+  var lx = tip.x + push * Math.cos(angle);
+  var ly = tip.y + push * Math.sin(angle);
+
+  // Determine text alignment based on angle
+  var deg = angle * 180 / Math.PI;
+  var align, baseline;
+  if (deg < -60 && deg > -120) {
+    // top
+    align = 'center'; baseline = 'bottom';
+  } else if (deg > 90) {
+    // bottom-right
+    align = 'left'; baseline = 'top';
+  } else {
+    // bottom-left
+    align = 'right'; baseline = 'top';
+  }
+
+  ctx.save();
+  ctx.textAlign = align;
+  ctx.textBaseline = baseline;
+  ctx.font = '600 12px "Helvetica Neue", sans-serif';
+  ctx.fillStyle = col.text;
+  ctx.fillText(lines[0], lx, ly);
+  ctx.font = '10px "Helvetica Neue", sans-serif';
+  ctx.fillStyle = col.muted;
+  ctx.fillText(lines[1], lx, ly + (baseline === 'bottom' ? -14 : 15));
+  ctx.restore();
+}
+
 function draw() {
   var W = cv.width / dpr;
   var H = cv.height / dpr;
   var col = colors();
   ctx.clearRect(0, 0, W, H);
 
-  var ref = triPoint(50, 50, 50, W, H);
-  var tE = ref.tipE, tO = ref.tipO, tT = ref.tipT;
-  var cx = ref.cx, cy = ref.cy;
+  var g = triGeo(W, H);
+  var tE = g.tipE, tO = g.tipO, tT = g.tipT;
+  var cx = g.cx, cy = g.cy;
 
-  // Grid triangles
+  // Grid triangles at 33%, 66%, 100%
   [0.33, 0.66, 1].forEach(function(f, i) {
     var gE = { x: cx + (tE.x-cx)*f, y: cy + (tE.y-cy)*f };
     var gO = { x: cx + (tO.x-cx)*f, y: cy + (tO.y-cy)*f };
@@ -314,41 +439,28 @@ function draw() {
     ctx.moveTo(gE.x, gE.y); ctx.lineTo(gO.x, gO.y); ctx.lineTo(gT.x, gT.y);
     ctx.closePath();
     ctx.strokeStyle = col.axis;
-    ctx.globalAlpha = i === 2 ? 0.6 : 0.25;
-    ctx.lineWidth = i === 2 ? 1 : 0.5;
+    ctx.globalAlpha = i === 2 ? 0.65 : 0.28;
+    ctx.lineWidth = i === 2 ? 1.2 : 0.6;
     ctx.stroke();
     ctx.restore();
   });
 
-  // Spokes
+  // Spokes from centre to tips
   ctx.save();
   ctx.setLineDash([2, 4]);
   ctx.strokeStyle = col.axis;
   ctx.lineWidth = 0.5;
   ctx.globalAlpha = 0.35;
-  [[tE, cx, cy], [tO, cx, cy], [tT, cx, cy]].forEach(function(p) {
-    ctx.beginPath(); ctx.moveTo(p[0].x, p[0].y); ctx.lineTo(p[1], p[2]); ctx.stroke();
+  [tE, tO, tT].forEach(function(tip) {
+    ctx.beginPath(); ctx.moveTo(tip.x, tip.y); ctx.lineTo(cx, cy); ctx.stroke();
   });
   ctx.restore();
 
-  // Corner labels
-  var labelDefs = [
-    { tip: tE, lines: ['Experience', 'Use regularly'], ax: 'center', ox: 0,   oy: -18 },
-    { tip: tO, lines: ['Outlook',    'Opportunity'],    ax: 'right',  ox: -14, oy: 0   },
-    { tip: tT, lines: ['Ethical feel','Comfortable'],  ax: 'left',   ox: 14,  oy: 0   }
-  ];
-  labelDefs.forEach(function(l) {
-    var tx = l.tip.x + l.ox, ty = l.tip.y + l.oy;
-    ctx.save();
-    ctx.textAlign = l.ax;
-    ctx.font = '500 12px "Helvetica Neue", sans-serif';
-    ctx.fillStyle = col.text;
-    ctx.fillText(l.lines[0], tx, ty);
-    ctx.font = '10px "Helvetica Neue", sans-serif';
-    ctx.fillStyle = col.muted;
-    ctx.fillText(l.lines[1], tx, ty + 13);
-    ctx.restore();
-  });
+  // Corner labels — placed cleanly outside the triangle
+  // Outward angle from centre to each tip
+  drawLabel(tE, g.aE, ['Experience', 'Use regularly'], col);
+  drawLabel(tO, g.aO, ['Outlook', 'Opportunity'], col);
+  drawLabel(tT, g.aT, ['Ethical feel', 'Fine with it'], col);
 
   // People dots
   people.forEach(function(p) {
@@ -360,14 +472,14 @@ function draw() {
     ctx.strokeStyle = ec.stroke; ctx.lineWidth = 1.5; ctx.stroke();
     ctx.restore();
     ctx.save();
-    ctx.font = '500 11px "Helvetica Neue", sans-serif';
+    ctx.font = '600 11px "Helvetica Neue", sans-serif';
     ctx.fillStyle = ec.text;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(p.name, pt.x, pt.y);
     ctx.restore();
   });
 
-  // Preview dot
+  // Preview dot (dashed)
   var v = vals();
   var pv = triPoint(v.exp, v.out, v.eth, W, H);
   var ec = ethColor(v.eth);
@@ -393,13 +505,18 @@ function vals() {
   };
 }
 
+function personaLabel(v) {
+  var highExp = v.exp >= 55, highOut = v.out >= 55;
+  var ethL = v.eth >= 65 ? 'ethically comfortable' : v.eth <= 35 ? 'ethically uncomfortable' : 'ethically uncertain';
+  if (highExp && highOut)  return '<span>Eager explorer</span> — using it and sees the opportunity, ' + ethL;
+  if (!highExp && !highOut) return '<span>Wary non-user</span> — hasn\'t used it, sees it as a threat, ' + ethL;
+  if (!highExp && highOut)  return '<span>Cautious observer</span> — not using it but open to possibility, ' + ethL;
+  return '<span>Conflicted user</span> — using it but uneasy, ' + ethL;
+}
+
 function update() {
   draw();
-  var v = vals();
-  var expL = v.exp >= 60 ? 'uses AI regularly' : v.exp <= 40 ? "doesn't use AI" : 'occasional user';
-  var outL = v.out >= 60 ? 'sees it as an opportunity' : v.out <= 40 ? 'sees it as a threat' : 'uncertain in outlook';
-  var ethL = v.eth >= 65 ? 'ethically comfortable' : v.eth <= 35 ? 'ethically uncomfortable' : 'ethically uncertain';
-  document.getElementById('yc').innerHTML = '<span>' + expL + '</span>, <span>' + outL + '</span>, <span>' + ethL + '</span>';
+  document.getElementById('yc').innerHTML = 'Your position: ' + personaLabel(vals());
 }
 
 function addPerson() {
