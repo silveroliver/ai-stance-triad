@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="An interactive walkthrough of how UK secondary legislation works, following six real statutory instruments across four Prime Ministers, including one still awaiting approval.">
+<meta name="description" content="How UK secondary legislation works, followed through six real statutory instruments, each with the government behind it and the sociological perspectives that actually explain it.">
 <meta name="color-scheme" content="light dark">
 <meta property="og:title" content="The 40-Day Clock">
 <meta property="og:description" content="How UK secondary legislation really works, followed through six real statutory instruments.">
@@ -141,6 +141,26 @@ h2{font-size:clamp(24px,3.6vw,33px); font-weight:600; letter-spacing:-.01em; mar
 .socio ul{margin:8px 0 0; padding-left:18px; font-size:14.5px; color:var(--ink2)}
 .socio li{margin-bottom:5px}
 .socio li b{color:var(--ink); font-weight:600}
+
+/* ---------- theory ---------- */
+.theory{border-top:1px solid var(--line); padding:22px 24px; background:var(--surface2)}
+.th-head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+.th-head .blockhead{margin:0}
+.th-count{font-size:12px; color:var(--ink3); font-family:"IBM Plex Mono",monospace}
+.th-grid{margin-top:14px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+@media (max-width:760px){ .th-grid{grid-template-columns:minmax(0,1fr)} }
+.th{background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:16px 17px; display:flex; flex-direction:column}
+.th h4{font-family:"Source Serif 4",Georgia,serif; font-size:17.5px; font-weight:600; line-height:1.25}
+.th .who{margin-top:5px; font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--accent); letter-spacing:.01em}
+.th p{margin-top:10px; font-size:14.5px; color:var(--ink2)}
+.th p strong{color:var(--ink); font-weight:600}
+.th .look{margin-top:12px; padding-top:11px; border-top:1px dashed var(--line2); font-size:13px; color:var(--ink2)}
+.th .look b{display:block; font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink3); margin-bottom:4px}
+.th-grid .th:last-child:nth-child(odd){grid-column:1 / -1}
+.th-grid .th:last-child:nth-child(odd) p,
+.th-grid .th:last-child:nth-child(odd) .look{max-width:70ch}
+.th-note{margin-top:12px; font-size:13px; color:var(--ink3); border-left:2px solid var(--line2); padding-left:12px; max-width:78ch}
+.th-note b{color:var(--ink2); font-weight:600}
 
 /* ---------- politics ---------- */
 .politics{border-top:1px solid var(--line); padding:22px 24px; background:var(--surface)}
@@ -300,6 +320,7 @@ footer li{margin-bottom:4px}
     <div class="sec-label">Choose your topic</div>
     <h2>Pick a curriculum area and watch one rule play out</h2>
     <p class="lede">Each of these is a real statutory instrument with a real procedural history, drawn from Parliament&rsquo;s own record. They span four Prime Ministers and two parties, two took the negative route and four the affirmative, and the last one has not finished yet. Each panel names the government, the Prime Minister and the minister responsible, and the party agenda the rule came out of.</p>
+    <p class="lede" style="margin-top:12px">Each one also carries the theoretical perspectives that do real work on it, and only those. The number varies from two to four, because a perspective earns its place on a given instrument if it changes what you would go and look for, not just what you would call things. Where a familiar perspective has been left out, the panel says so and says why.</p></p>
 
     <div class="topics" role="tablist" aria-label="Curriculum topic"></div>
 
@@ -434,6 +455,18 @@ const CASES = [
       ['The state and the family','The rule sets the boundary between parental authority and state authority over a child&rsquo;s time.'],
       ['Power without visibility','No MP spoke about this. It was law before a single member of the public could have read it.']
     ],
+    theory:[
+      {name:'The social construction of statistics', who:'Aaron Cicourel and John Kitsuse',
+       text:'Official figures are not found, they are made by the people who fill in the forms. These regulations set the codes a school must use for each absence, and the choice between an authorised and an unauthorised code is a judgement made by a member of staff on a Monday morning. The national absence statistic and the decision to fine a parent are both built on top of that judgement. The category does the work, and the category is set here.',
+       look:'How many distinct absence codes the regulations prescribe, and which of them trigger enforcement.'},
+      {name:'Discipline and the register', who:'Michel Foucault',
+       text:'Foucault described institutions where power works through continuous small acts of recording and comparison rather than through dramatic punishment. A register taken twice a day, standardised nationally and shared daily with central government is close to a literal example. On this reading the significant part of the instrument is not the fines, it is that every pupil in England becomes a legible data point.',
+       look:'The requirement to share daily register data with the Department for Education, which is the part nobody debated.'},
+      {name:'Manifest and latent functions', who:'Robert Merton',
+       text:'Merton separated what an institution says it is doing from what it also does. The stated purpose here is improving attendance. The latent effect is the construction of a national pupil-level dataset with uses well beyond absence. The framework is useful precisely because it does not ask you to decide whether that is good or bad before you notice it.',
+       look:'What the dataset can be used for once it exists, and who is given access to it.'}
+    ],
+    theoryNote:'Marxist accounts of schooling, particularly Bowles and Gintis on the correspondence between school discipline and workplace discipline, fit the topic well. They are omitted here because testing them on <em>this</em> instrument would need enforcement data broken down by household income, and the instrument does not produce that.',
     pol:{
       when:'Laid 29 February 2024',
       party:'Conservative', partyClass:'con', partySub:'In office since 2010; 14 years in',
@@ -473,6 +506,17 @@ const CASES = [
       ['The state as parent','Children in care are the clearest case of the state taking on the family role. This shows how conditionally that role is held.'],
       ['Whose voice counts','The Children&rsquo;s Commissioner and children&rsquo;s charities were not consulted. A court later held that was unlawful.'],
       ['Emergency as a mechanism','Crisis widens executive power. Studying which duties were relaxed first tells you which groups carry least weight.']
+    ],
+    theory:[
+      {name:'Why the private sphere escapes scrutiny', who:'Radical feminist theory &middot; Kate Millett, Christine Delphy',
+       text:'The core radical feminist claim about the home is structural rather than about any individual: harm that happens in private goes unregulated <strong>because</strong> it happens in private, and the only correction is an outside eye. Children&rsquo;s social care is the state acting as that eye. What these regulations did was reduce how often that eye was required to open. The argument transfers directly, whatever you make of the wider theory.',
+       look:'Which of the relaxed duties involved somebody from outside the household actually seeing the child.'},
+      {name:'Whose claims get suspended first', who:'Marxist approaches to the state',
+       text:'In a crisis a government cannot suspend everything, so the order in which it suspends things is evidence about whose claims carry least weight. These regulations relaxed duties owed to children in care during weeks in which other statutory obligations were being reinforced. You do not have to accept the whole theory for the comparative question to be productive.',
+       look:'The full list of duties relaxed in April 2020, set against duties on the same department left untouched.'},
+      {name:'Status, and what follows from it', who:'Labelling theory &middot; Howard Becker',
+       text:'&ldquo;Looked-after child&rdquo; is a status conferred by the state, and everything owed to that child follows from the status rather than from the child. That is why a change of regulation can change what a person is entitled to overnight while nothing about the person changes. It also helps explain why this went almost unnoticed: the category is small, and it has no electoral weight.',
+       look:'How many children held that status in England in April 2020, against how much coverage the change received before the prayer was tabled.'}
     ],
     pol:{
       when:'Laid 23 April 2020',
@@ -517,6 +561,20 @@ const CASES = [
       ['Labelling','The order does not describe a behaviour. It defines an object, and by extension a type of person who carries it.'],
       ['The state&rsquo;s symbolic function','Creating an offence is cheap, fast and visible. Addressing the conditions behind knife carrying is none of those things.']
     ],
+    theory:[
+      {name:'Folk devils and moral panics', who:'Stanley Cohen',
+       text:'Cohen&rsquo;s sequence runs concern, hostility, a response out of proportion to the threat, and a named folk devil. This is a fair test of it rather than an easy one, because carrying such a knife in public was already an offence. Cohen&rsquo;s framework asks what the extra ban adds, and the answer may be largely symbolic. That is not the same as saying it is worthless.',
+       look:'What was already a criminal offence before this order, and what specifically changed on top of it.'},
+      {name:'Crime control and public attention', who:'Stuart Hall and colleagues &middot; Policing the Crisis',
+       text:'Hall argued that alarm about a particular street crime can be organised, and that it pulls attention towards individual offenders and away from the conditions that produce offending. Applied here it directs you to the thirteen months between the announcement and the law taking effect, and to what else was happening politically in that window.',
+       look:'The timing. Announced August 2023, laid January 2024, in force September 2024, with a general election in between.'},
+      {name:'Boundary maintenance', who:'&Eacute;mile Durkheim',
+       text:'This is the one instrument on this page where a functionalist account does real analytical work. Durkheim argued that responding to crime is a ritual which restates what a society will not tolerate, and that the restating <strong>is</strong> the function, separately from any deterrent effect. A publicised ban on an object, with a surrender scheme attached, fits that description closely.',
+       look:'The surrender and compensation scheme, which operates as a public ceremony as much as a logistical exercise.'},
+      {name:'Left realism and right realism', who:'John Lea and Jock Young &middot; James Q. Wilson',
+       text:'These two disagree about this policy and make different predictions, which is what makes them worth putting side by side. Left realists insist knife crime is real and falls hardest on working-class and minority communities, so treating the ban as merely symbolic is a mistake, but they expect little movement without also addressing relative deprivation and marginalisation. Right realists treat carrying as a rational calculation and expect a ban plus surrender scheme to shift the cost of it.',
+       look:'Whether recorded knife possession offences moved after September 2024. The disagreement is testable.'}
+    ],
     pol:{
       when:'Laid 25 January 2024',
       party:'Conservative', partyClass:'con', partySub:'Final full year before the July 2024 general election',
@@ -559,6 +617,15 @@ const CASES = [
       ['Expertise and legitimacy','Ministers act on Low Pay Commission advice. This is technocratic governance: the political choice is dressed as a technical one.'],
       ['The limits of consent','MPs vote yes or no on the whole rate card. No MP can propose a different figure.']
     ],
+    theory:[
+      {name:'The rule of experts', who:'Max Weber',
+       text:'Weber described the modern state as rational-legal authority exercised through bureaucracy, and warned that political questions get restaged as technical ones. This is the clearest case of it on the page. Parliament does not choose a number; it approves what the Low Pay Commission recommends. The July 2024 remit change proves the choice is political rather than technical: <strong>the government changed the question the experts were asked, and the answer changed.</strong>',
+       look:'The remit letter, then the recommendation, then the rate. The decision happens at the first of those three, not the last.'},
+      {name:'What counts as skilled work', who:'Marxist feminist approaches &middot; Ann Oakley, Christine Delphy',
+       text:'Women are heavily overrepresented in the occupations sitting on the wage floor: care, cleaning, retail, hospitality. The argument is that this is not an accident of supply and demand but a continuation of the devaluation of work historically done unpaid in the home. On that reading, raising the floor helps materially while leaving untouched the reason those jobs are on the floor.',
+       look:'Which occupations cluster at the minimum, and what share of the people doing them are women.'}
+    ],
+    theoryNote:'Functionalist accounts of stratification (Davis and Moore on differentials as incentives) and Gramscian readings (a concession that buys consent) can both be applied to the minimum wage. Neither appears here because on <em>this</em> instrument they restate the outcome rather than pointing you at anything you could go and check.',
     pol:{
       when:'Laid 4 February 2025',
       party:'Labour', partyClass:'lab', partySub:'Elected July 2024, ending 14 years of Conservative government',
@@ -600,6 +667,17 @@ const CASES = [
       ['Horizontal redistribution','Money moves between households on the same energy bill, not from the wealthy through the tax system. A low-income household just outside the benefit criteria pays in and gets nothing back.'],
       ['Universalism and selectivism','The classic social policy divide, in one scheme. In 2025 the government widened it from 3.4 to about 6.1 million households by dropping a property test, at a cost of roughly &pound;15 a year on every bill.'],
       ['Hidden taxation','A levy on bills is a tax that never appears in a Budget and is never voted on as one. Who notices a charge like this, and who has the resources to object to it?']
+    ],
+    theory:[
+      {name:'Universal or selective provision', who:'Richard Titmuss',
+       text:'Titmuss argued that means-tested provision delivers more per pound spent but tends to stigmatise, to miss people who qualify, and over time to decline in quality, because a service used only by the poor has no broad constituency to defend it. The Warm Home Discount is fully means-tested and relies on benefit data-matching, with a helpline for the households the match fails to find.',
+       look:'How many eligible households actually receive the rebate, set against how many qualify on paper.'},
+      {name:'The case for targeting', who:'New Right social policy &middot; Charles Murray, David Marsland',
+       text:'The opposite argument, and the one the policy design actually follows. Targeting concentrates limited money on those with least, avoids paying a rebate to households that do not need it, and keeps the total cost bounded and visible. Set against Titmuss this is a live and unresolved disagreement about what welfare is for, and here it is settled by administrative design rather than by anyone arguing it out.',
+       look:'The qualifying date and the list of qualifying benefits. That is where &ldquo;who counts as poor&rdquo; is actually decided.'},
+      {name:'Who pays for poverty relief', who:'Marxist approaches to state finance',
+       text:'The rebate is not funded from taxation. Suppliers recover it through a levy on every domestic energy bill, around &pound;37 a year on an average dual-fuel household. So the money moves sideways between households, largely within the same part of the income distribution, and not from capital. Whatever you conclude about that, notice that <strong>no stage of the parliamentary process asks the question.</strong>',
+       look:'The levy figure in the impact assessment, and the households sitting just above the eligibility line who pay in and get nothing back.'}
     ],
     pol:{
       when:'Laid 2 February 2026',
@@ -644,6 +722,17 @@ const CASES = [
       ['Housing, class and the body','Where you live determines what you breathe. This is material inequality with a measurable health outcome, and a named child at the centre of it.'],
       ['Campaigns as a route to law','The duty exists because a bereaved family, a coroner and a sustained press campaign made it politically impossible to ignore. Compare that with the instruments nobody noticed.'],
       ['Continuity of the state','Prime Ministers change; the instrument does not. It was laid under one government and has to be approved by another, under a deadline the previous one set.']
+    ],
+    theory:[
+      {name:'Private troubles and public issues', who:'C. Wright Mills',
+       text:'Mills distinguished a difficulty experienced by one person from a pattern produced by the structure of a society, and argued that the work of sociology is moving things from the first category to the second. The inquest is the precise moment that happened here. The coroner, Joanne Kearsley, returned her conclusion on 15 November 2022 and said the case should be &ldquo;a defining moment for the housing sector&rdquo;. These regulations exist because a private death was reclassified as a public issue.',
+       look:'The gap between the death in December 2020 and the first legal duties taking effect in October 2025.'},
+      {name:'Housing as a class relation', who:'Friedrich Engels',
+       text:'Engels wrote about the link between housing conditions and working-class health in 1845, and his argument was not that the conditions were unknown but that nobody was obliged to fix them. The structure of this instrument is an answer to exactly that complaint: it does not describe what good housing looks like, it imposes a deadline for acting. The historical rhyme is worth sitting with rather than treating as rhetoric.',
+       look:'The fact that the duty takes the form of a time limit rather than a standard.'},
+      {name:'Whose complaints get acted on', who:'Intersectional approaches &middot; Kimberl&eacute; Crenshaw',
+       text:'The family, originally from Sudan, complained repeatedly. After the verdict they said publicly that they had been treated differently because they were refugees, and the Runnymede Trust raised the same concern. The intersectional argument is that tenure, class and racialisation do not operate as separate variables to be controlled for, but compound: the question is not whether poor tenants are ignored or minority tenants are ignored, but what happens to someone who is both.',
+       look:'Whether the new duties say anything about how complaints are received and recorded, as distinct from how quickly repairs are done.'}
     ],
     pol:{
       when:'Laid 13 July 2026, one week before the change of Prime Minister',
@@ -728,6 +817,22 @@ function renderCase(){
         <div class="blockhead">Why a sociologist cares</div>
         <ul>${c.socio.map(s=>`<li><b>${s[0]}.</b> ${s[1]}</li>`).join('')}</ul>
       </div>
+    </div>
+
+    <div class="theory">
+      <div class="th-head">
+        <div class="blockhead">Perspectives that earn their place here</div>
+        <span class="th-count">${c.theory.length} of them on this instrument</span>
+      </div>
+      <div class="th-grid">
+        ${c.theory.map(t=>`<div class="th">
+          <h4>${t.name}</h4>
+          <div class="who">${t.who}</div>
+          <p>${t.text}</p>
+          <div class="look"><b>Go and look at</b>${t.look}</div>
+        </div>`).join('')}
+      </div>
+      ${c.theoryNote?`<p class="th-note"><b>Left out on purpose.</b> ${c.theoryNote}</p>`:''}
     </div>
 
     <div class="politics">
