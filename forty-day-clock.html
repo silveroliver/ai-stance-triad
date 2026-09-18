@@ -819,22 +819,6 @@ function renderCase(){
       </div>
     </div>
 
-    <div class="theory">
-      <div class="th-head">
-        <div class="blockhead">Perspectives that earn their place here</div>
-        <span class="th-count">${c.theory.length} of them on this instrument</span>
-      </div>
-      <div class="th-grid">
-        ${c.theory.map(t=>`<div class="th">
-          <h4>${t.name}</h4>
-          <div class="who">${t.who}</div>
-          <p>${t.text}</p>
-          <div class="look"><b>Go and look at</b>${t.look}</div>
-        </div>`).join('')}
-      </div>
-      ${c.theoryNote?`<p class="th-note"><b>Left out on purpose.</b> ${c.theoryNote}</p>`:''}
-    </div>
-
     <div class="politics">
       <div class="pol-head">
         <div class="blockhead">Who was in power</div>
@@ -882,6 +866,22 @@ function renderCase(){
       <div class="blockhead">What this case shows</div>
       <p>${c.verdict}</p>
       <p class="notdone">${c.notdone}</p>
+    </div>
+
+    <div class="theory">
+      <div class="th-head">
+        <div class="blockhead">Links to sociological perspectives</div>
+        <span class="th-count">${c.theory.length} that do real work on this instrument</span>
+      </div>
+      <div class="th-grid">
+        ${c.theory.map(t=>`<div class="th">
+          <h4>${t.name}</h4>
+          <div class="who">${t.who}</div>
+          <p>${t.text}</p>
+          <div class="look"><b>Go and look at</b>${t.look}</div>
+        </div>`).join('')}
+      </div>
+      ${c.theoryNote?`<p class="th-note"><b>Left out on purpose.</b> ${c.theoryNote}</p>`:''}
     </div>`;
 
   renderSteps();
