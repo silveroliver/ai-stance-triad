@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="An interactive walkthrough of how UK secondary legislation works, following four real statutory instruments on education, families, crime and low pay step by step through Parliament.">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="The 40-Day Clock">
+<meta property="og:description" content="How UK secondary legislation really works, followed through four real statutory instruments.">
+<meta property="og:type" content="website">
+<style>
+  :root{color-scheme:light dark; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px)}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+<title>The 40-Day Clock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap">
+
+<style>
+:root{
+  --ground:#F4F5F7; --surface:#FFFFFF; --surface2:#EAECF0; --sunk:#E3E6EB;
+  --ink:#171A1F; --ink2:#4E5663; --ink3:#79818E;
+  --line:#DBDFE5; --line2:#C2C7D1;
+  --accent:#8F6612; --accent-soft:#F3EAD5; --accent-line:#D9C089;
+  --commons:#0B6A4C; --commons-soft:#E2EFEA;
+  --lords:#94293B; --lords-soft:#F5E4E7;
+  --joint:#3A4A6E; --joint-soft:#E6EAF2;
+  --con:#1B62A8; --lab:#C4161C;
+  --shadow:0 1px 2px rgba(20,25,35,.06), 0 8px 24px -12px rgba(20,25,35,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111317; --surface:#191C21; --surface2:#21252B; --sunk:#0C0E11;
+    --ink:#E9EBEF; --ink2:#A8B0BC; --ink3:#7B838F;
+    --line:#2B3038; --line2:#3C424B;
+    --accent:#D9AC4A; --accent-soft:#2E2715; --accent-line:#5B4B22;
+    --commons:#57C79A; --commons-soft:#132B22;
+    --lords:#E28A98; --lords-soft:#2F181C;
+    --joint:#9AAAD0; --joint-soft:#1B212C;
+    --con:#68A6E2; --lab:#EE6F74;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111317; --surface:#191C21; --surface2:#21252B; --sunk:#0C0E11;
+  --ink:#E9EBEF; --ink2:#A8B0BC; --ink3:#7B838F;
+  --line:#2B3038; --line2:#3C424B;
+  --accent:#D9AC4A; --accent-soft:#2E2715; --accent-line:#5B4B22;
+  --commons:#57C79A; --commons-soft:#132B22;
+  --lords:#E28A98; --lords-soft:#2F181C;
+  --joint:#9AAAD0; --joint-soft:#1B212C;
+  --con:#68A6E2; --lab:#EE6F74;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px; margin:0 auto; padding-left:20px; padding-right:20px; padding-block:0}
+h1,h2,h3,h4{font-family:"Source Serif 4", Georgia, "Times New Roman", serif; text-wrap:balance; margin:0; line-height:1.18}
+p{margin:0}
+a{color:inherit}
+.mono{font-family:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace; font-variant-numeric:tabular-nums}
+
+/* ---------- masthead ---------- */
+.mast{border-bottom:1px solid var(--line); background:var(--surface)}
+.mast .wrap{padding-block:44px 38px}
+.eyebrow{font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:600}
+h1{font-size:clamp(34px,6.4vw,58px); font-weight:700; letter-spacing:-.015em; margin-top:14px}
+.standfirst{margin-top:16px; max-width:60ch; font-size:17.5px; color:var(--ink2)}
+.mast-meta{margin-top:24px; display:flex; flex-wrap:wrap; gap:8px 10px; font-size:12px; color:var(--ink3)}
+.mast-meta span{border:1px solid var(--line); border-radius:2px; padding:3px 8px; background:var(--ground)}
+
+section{padding-block:46px}
+.sec-label{font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink3); font-weight:600; display:flex; align-items:center; gap:12px}
+.sec-label::after{content:""; flex:1; height:1px; background:var(--line)}
+h2{font-size:clamp(24px,3.6vw,33px); font-weight:600; letter-spacing:-.01em; margin-top:16px}
+.lede{margin-top:12px; max-width:62ch; color:var(--ink2); font-size:16.5px}
+
+/* ---------- scale ---------- */
+.scale-grid{margin-top:30px; display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:26px; align-items:start}
+@media (max-width:760px){ .scale-grid{grid-template-columns:minmax(0,1fr)} }
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:22px; box-shadow:var(--shadow); min-width:0}
+.chart-head{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap}
+.chart-title{font-family:"Source Serif 4",Georgia,serif; font-size:19px; font-weight:600}
+.chart-sub{font-size:12.5px; color:var(--ink3)}
+.chartbox{overflow-x:auto; margin-top:18px}
+.facts{display:flex; flex-direction:column; gap:14px}
+.fact{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:3px; padding:15px 17px}
+.fact b{display:block; font-family:"Source Serif 4",Georgia,serif; font-size:29px; font-weight:700; line-height:1.1; letter-spacing:-.01em}
+.fact span{display:block; margin-top:5px; font-size:13.5px; color:var(--ink2)}
+
+/* ---------- topic switcher ---------- */
+.topics{margin-top:26px; display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+@media (max-width:860px){ .topics{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:440px){ .topics{grid-template-columns:1fr} }
+.topic{
+  text-align:left; cursor:pointer; font:inherit; color:inherit;
+  background:var(--surface); border:1px solid var(--line); border-radius:4px;
+  padding:15px 16px 16px; display:flex; flex-direction:column; gap:5px;
+  transition:border-color .15s, background .15s, transform .15s;
+}
+.topic:hover{border-color:var(--line2); transform:translateY(-1px)}
+.topic:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.topic .t-kicker{font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink3); font-weight:600}
+.topic .t-name{font-family:"Source Serif 4",Georgia,serif; font-size:18px; font-weight:600; line-height:1.25}
+.topic .t-note{font-size:12.5px; color:var(--ink3); line-height:1.45}
+.topic[aria-selected="true"]{background:var(--accent-soft); border-color:var(--accent-line)}
+.topic[aria-selected="true"] .t-kicker{color:var(--accent)}
+.topic[aria-selected="true"] .t-note{color:var(--ink2)}
+
+/* ---------- case ---------- */
+.case{margin-top:24px; background:var(--surface); border:1px solid var(--line); border-radius:5px; overflow:hidden; box-shadow:var(--shadow)}
+.case-head{padding:24px; border-bottom:1px solid var(--line); background:linear-gradient(180deg, var(--surface2), var(--surface))}
+.si-num{font-size:12.5px; letter-spacing:.06em; color:var(--accent); font-weight:600}
+.case-head h3{font-size:clamp(20px,3vw,27px); font-weight:600; margin-top:8px; letter-spacing:-.01em}
+.chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:14px}
+.chip{font-size:11.5px; padding:3px 9px; border-radius:2px; border:1px solid var(--line2); color:var(--ink2); background:var(--ground)}
+.chip.proc{border-color:var(--accent-line); background:var(--accent-soft); color:var(--accent); font-weight:600}
+.power{margin-top:18px; display:flex; gap:12px; align-items:flex-start; padding:13px 15px; background:var(--ground); border:1px dashed var(--line2); border-radius:3px}
+.power .pk{font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink3); font-weight:600; white-space:nowrap; padding-top:3px}
+.power .pv{font-size:14px; color:var(--ink2)}
+.power .pv em{font-style:normal; color:var(--ink); font-weight:600}
+
+.case-body{padding:24px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:22px}
+@media (max-width:760px){ .case-body{grid-template-columns:1fr} }
+.blockhead{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink3); font-weight:600; margin-bottom:7px}
+.blocktext{font-size:15px; color:var(--ink2)}
+.blocktext strong{color:var(--ink); font-weight:600}
+.socio{background:var(--joint-soft); border:1px solid var(--line); border-radius:3px; padding:16px}
+.socio .blockhead{color:var(--joint)}
+.socio ul{margin:8px 0 0; padding-left:18px; font-size:14.5px; color:var(--ink2)}
+.socio li{margin-bottom:5px}
+.socio li b{color:var(--ink); font-weight:600}
+
+/* ---------- politics ---------- */
+.politics{border-top:1px solid var(--line); padding:22px 24px; background:var(--surface)}
+.pol-head{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.pol-head .blockhead{margin:0}
+.pol-when{font-size:12px; color:var(--ink3); font-family:"IBM Plex Mono",monospace}
+.pol-row{margin-top:14px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden}
+@media (max-width:620px){ .pol-row{grid-template-columns:1fr} }
+.pol-cell{background:var(--surface); padding:13px 15px}
+.pol-k{font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink3); font-weight:600}
+.pol-v{margin-top:6px; font-size:15.5px; font-weight:600; line-height:1.3; display:flex; align-items:center; gap:8px}
+.pol-v .sw{width:10px; height:10px; border-radius:2px; flex-shrink:0}
+.pol-v .sw.con{background:var(--con)} .pol-v .sw.lab{background:var(--lab)}
+.pol-sub{margin-top:4px; font-size:12.5px; color:var(--ink3); line-height:1.4}
+.pol-agenda{margin-top:16px; border-left:3px solid var(--accent); padding:2px 0 2px 15px}
+.pol-agenda h4{font-family:"Source Serif 4",Georgia,serif; font-size:17px; font-weight:600}
+.pol-agenda p{margin-top:7px; font-size:14.5px; color:var(--ink2); max-width:72ch}
+.pol-agenda p + p{margin-top:9px}
+.pol-agenda strong{color:var(--ink); font-weight:600}
+
+/* ---------- player ---------- */
+.player{border-top:1px solid var(--line); background:var(--sunk); padding:22px 24px}
+.player-top{display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap}
+.player-title{font-family:"Source Serif 4",Georgia,serif; font-size:19px; font-weight:600}
+.controls{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+button.ctl{
+  font:inherit; font-size:13px; font-weight:500; cursor:pointer; color:var(--ink);
+  background:var(--surface); border:1px solid var(--line2); border-radius:3px; padding:6px 13px;
+  transition:background .15s, border-color .15s;
+}
+button.ctl:hover:not(:disabled){background:var(--surface2); border-color:var(--ink3)}
+button.ctl:disabled{opacity:.4; cursor:default}
+button.ctl:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+button.ctl.primary{background:var(--accent); border-color:var(--accent); color:var(--ground)}
+button.ctl.primary:hover:not(:disabled){filter:brightness(1.08); background:var(--accent)}
+.progress{height:3px; background:var(--line); border-radius:2px; margin-top:16px; overflow:hidden}
+.progress i{display:block; height:100%; background:var(--accent); width:0; transition:width .35s ease}
+
+.steps{margin-top:20px; display:flex; flex-direction:column; gap:0; position:relative}
+.step{
+  display:grid; grid-template-columns:76px 22px minmax(0,1fr); gap:0 12px;
+  padding:0; opacity:.3; transition:opacity .3s;
+}
+.step.on{opacity:1}
+.step.cur .s-body{background:var(--surface); border-color:var(--accent-line); box-shadow:var(--shadow)}
+.s-day{text-align:right; font-size:11.5px; color:var(--ink3); padding-top:15px; line-height:1.3}
+.s-day b{display:block; font-size:14px; color:var(--ink2); font-weight:600}
+.s-rail{position:relative; display:flex; justify-content:center}
+.s-rail::before{content:""; position:absolute; top:0; bottom:0; width:1px; background:var(--line2)}
+.step:first-child .s-rail::before{top:20px}
+.step:last-child .s-rail::before{bottom:calc(100% - 20px)}
+.s-dot{position:relative; width:11px; height:11px; border-radius:50%; margin-top:15px; background:var(--ink3); border:2px solid var(--ground)}
+.step.cur .s-dot{box-shadow:0 0 0 4px var(--accent-soft)}
+.s-body{
+  border:1px solid transparent; border-radius:4px; padding:12px 14px; margin:5px 0;
+  transition:background .25s, border-color .25s, box-shadow .25s; min-width:0;
+}
+.s-what{font-size:15.5px; font-weight:600; line-height:1.35}
+.s-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:7px}
+.tag{font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; font-weight:600; padding:2px 7px; border-radius:2px}
+.tag.hc{background:var(--commons-soft); color:var(--commons)}
+.tag.hl{background:var(--lords-soft); color:var(--lords)}
+.tag.jt{background:var(--joint-soft); color:var(--joint)}
+.tag.gov{background:var(--accent-soft); color:var(--accent)}
+.s-why{margin-top:9px; font-size:14px; color:var(--ink2); display:none}
+.step.cur .s-why, .steps.all .s-why{display:block}
+.s-link{display:inline-flex; align-items:center; gap:5px; margin-top:9px; font-size:12.5px; color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-line); padding-bottom:1px}
+.s-link:hover{border-bottom-color:var(--accent)}
+.s-why + .s-link{margin-top:9px}
+.step:not(.cur) .s-link{display:none}
+.steps.all .step .s-link{display:inline-flex}
+.step.pivot .s-dot{background:var(--accent); width:13px; height:13px; margin-top:14px}
+.step.hc .s-dot{background:var(--commons)}
+.step.hl .s-dot{background:var(--lords)}
+.step.jt .s-dot{background:var(--joint)}
+.step.pivot.hc .s-dot, .step.pivot.hl .s-dot{background:var(--accent)}
+@media (max-width:520px){
+  .step{grid-template-columns:58px 20px minmax(0,1fr)}
+  .s-day{font-size:10.5px}
+  .s-day b{font-size:12.5px}
+}
+
+.verdict{margin:0; padding:20px 24px 24px; border-top:1px solid var(--line); background:var(--surface)}
+.verdict .blockhead{color:var(--accent)}
+.verdict p{font-size:15.5px; color:var(--ink2); max-width:70ch}
+.verdict p strong{color:var(--ink)}
+.notdone{margin-top:14px; font-size:13.5px; color:var(--ink3); border-left:2px solid var(--line2); padding-left:12px}
+
+/* ---------- routes ---------- */
+.routes{margin-top:26px; display:grid; grid-template-columns:1fr 1fr; gap:16px}
+@media (max-width:700px){ .routes{grid-template-columns:1fr} }
+.route{background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:20px}
+.route h4{font-size:19px; font-weight:600; margin-bottom:4px}
+.route .rsub{font-size:12.5px; color:var(--ink3)}
+.route ol{margin:14px 0 0; padding-left:20px; font-size:14.5px; color:var(--ink2)}
+.route li{margin-bottom:7px}
+.route li b{color:var(--ink); font-weight:600}
+.route .rkey{margin-top:14px; font-size:13.5px; padding:10px 12px; border-radius:3px; background:var(--ground); border:1px solid var(--line)}
+
+/* ---------- involve ---------- */
+.involve{margin-top:24px; display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+@media (max-width:820px){ .involve{grid-template-columns:1fr 1fr} }
+@media (max-width:520px){ .involve{grid-template-columns:1fr} }
+.iv{background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:17px}
+.iv .ivn{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--accent); font-weight:600}
+.iv h4{font-size:16.5px; font-weight:600; margin-top:7px}
+.iv p{font-size:13.5px; color:var(--ink2); margin-top:7px}
+.iv a{color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-line)}
+
+footer{border-top:1px solid var(--line); background:var(--surface); margin-top:20px}
+footer .wrap{padding-block:30px 40px}
+footer p{font-size:13px; color:var(--ink3); max-width:78ch}
+footer a{color:var(--ink2)}
+footer ul{margin:10px 0 0; padding-left:18px; font-size:13px; color:var(--ink3)}
+footer li{margin-bottom:4px}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="wrap">
+    <div class="eyebrow">Secondary legislation &middot; A-level sociology</div>
+    <h1>The 40-Day Clock</h1>
+    <p class="standfirst">Most of the law that shapes your school, your family, your policing and your pay is not passed by Parliament. It is signed by a minister and then quietly runs down a clock. Pick a topic and watch a real rule become law, step by step, with the real dates.</p>
+    <div class="mast-meta">
+      <span class="mono">4 real statutory instruments</span>
+      <span class="mono">Who was in power, and why it mattered</span>
+      <span class="mono">Every step linked to its source</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">Start here</div>
+    <h2>Parliament makes about 36 laws a year. Ministers make about 1,700.</h2>
+    <p class="lede">An <strong>Act of Parliament</strong> is primary legislation: debated, amended and voted through both Houses over months. An Act almost always ends with a clause handing ministers the power to fill in the detail later. That detail is <strong>secondary legislation</strong>, and it usually arrives as a <strong>statutory instrument</strong> (SI). An SI is real, enforceable law. It can create criminal offences, set benefit rates and change what schools must do.</p>
+
+    <div class="scale-grid">
+      <div class="panel">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">SIs laid before Parliament, by year</div>
+            <div class="chart-sub">Only instruments given a parliamentary procedure. The line marks the 10-year average for Acts.</div>
+          </div>
+        </div>
+        <div class="chartbox" id="chartbox"></div>
+      </div>
+
+      <div class="facts">
+        <div class="fact"><b>16</b><span>SIs rejected by Parliament since 1950 &mdash; 11 in the Commons, 5 in the Lords. The Commons has not rejected one since 1979.</span></div>
+        <div class="fact"><b>0</b><span>Words of an SI that Parliament can change. MPs and peers can approve or reject the whole thing. They cannot amend a single line.</span></div>
+        <div class="fact"><b>~2&#8202;/&#8202;3</b><span>Share of SIs laid under the negative procedure, where the instrument is already law before anyone has looked at it.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface2); border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-label">Choose your topic</div>
+    <h2>Pick a curriculum area and watch one rule play out</h2>
+    <p class="lede">Each of these is a real statutory instrument with a real procedural history, drawn from Parliament&rsquo;s own record. Two took the negative route and two the affirmative; three were made by a Conservative government and one by a Labour one. Each panel names the government, the Prime Minister and the minister who signed, and the party agenda the rule came out of.</p>
+
+    <div class="topics" role="tablist" aria-label="Curriculum topic"></div>
+
+    <div class="case" id="case"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">The two routes</div>
+    <h2>Negative and affirmative: who has to say yes?</h2>
+    <p class="lede">The enabling Act decides which route an instrument takes. That single choice, made years earlier when the Act was passed, decides whether Parliament has to actively approve the rule or merely fail to stop it.</p>
+    <div class="routes">
+      <div class="route">
+        <h4>Negative procedure</h4>
+        <div class="rsub">Used for roughly two thirds of SIs &middot; Education and Families examples above</div>
+        <ol>
+          <li>A minister <b>signs</b> the instrument. It is law from that moment.</li>
+          <li>It is <b>laid</b> before both Houses.</li>
+          <li>A <b>40-day objection period</b> begins.</li>
+          <li>Committees may examine it and report.</li>
+          <li>Any MP or peer may table a <b>prayer</b> to annul it &mdash; but the government controls whether that prayer is ever debated.</li>
+          <li>If no prayer is agreed, the instrument simply <b>remains law</b>.</li>
+        </ol>
+        <div class="rkey">Silence is consent. Doing nothing is how most of these laws pass.</div>
+      </div>
+      <div class="route">
+        <h4>Affirmative procedure</h4>
+        <div class="rsub">Roughly a fifth to a quarter of SIs &middot; Crime and Work examples above</div>
+        <ol>
+          <li>A <b>draft</b> is laid before both Houses. It is not yet law.</li>
+          <li>The government <b>tables a motion</b> to approve it. Nothing can be debated until it does.</li>
+          <li>Committees examine it and report.</li>
+          <li>Each House <b>debates and votes</b> &mdash; often in committee rather than the chamber.</li>
+          <li>Only once both Houses have approved can the minister <b>sign it into law</b>.</li>
+        </ol>
+        <div class="rkey">Consent must be given. But the vote is still yes or no on the whole text, and governments with a majority rarely lose.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface2); border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-label">Getting involved</div>
+    <h2>Six things a person outside Parliament can actually do</h2>
+    <p class="lede">Secondary legislation is unusually open to outside influence, precisely because so few people are watching it. The scrutiny committees in particular are hungry for evidence they cannot get from the department.</p>
+    <div class="involve">
+      <div class="iv"><div class="ivn">01</div><h4>Answer the consultation</h4><p>Most SIs are preceded by a government consultation on GOV.UK. This is the stage with the most leverage, because the text is still being written. Anyone can respond, including a sixth-form class.</p></div>
+      <div class="iv"><div class="ivn">02</div><h4>Track the instrument</h4><p>Parliament publishes a live page for every SI at <a href="https://statutoryinstruments.parliament.uk" target="_blank" rel="noopener">statutoryinstruments.parliament.uk</a>, and the full text sits on <a href="https://www.legislation.gov.uk" target="_blank" rel="noopener">legislation.gov.uk</a>. Every step in the walkthroughs above links to one of these.</p></div>
+      <div class="iv"><div class="ivn">03</div><h4>Write to the scrutiny committees</h4><p>The Lords <b>Secondary Legislation Scrutiny Committee</b> takes submissions from charities, professionals and the public, and quotes them in its reports. Drawing an instrument to the special attention of the House starts here.</p></div>
+      <div class="iv"><div class="ivn">04</div><h4>Ask your MP to pray against it</h4><p>Under the negative procedure any MP can table a prayer. It costs one signature. Getting it debated needs pressure &mdash; the Adoption walkthrough shows a prayer that did reach the floor.</p></div>
+      <div class="iv"><div class="ivn">05</div><h4>Petition and organise</h4><p>Petitions on <a href="https://petition.parliament.uk" target="_blank" rel="noopener">petition.parliament.uk</a> passing 100,000 signatures are considered for debate. Campaigning organisations are often the only reason an SI gets noticed at all.</p></div>
+      <div class="iv"><div class="ivn">06</div><h4>Challenge it in court</h4><p>Unlike an Act, an SI can be struck down by judges if the minister exceeded the power in the parent Act or failed to consult. This is what happened to the 2020 adoption regulations.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><strong style="color:var(--ink)">Where this comes from.</strong> Every date, committee finding, debate and vote in the four walkthroughs is taken from Parliament&rsquo;s procedural record for that instrument, held in a Data Graphs knowledge graph of UK parliamentary procedure. Step names and definitions are the ones the procedure model itself uses. Contextual figures are from House of Commons Library and Hansard Society research.</p>
+    <ul>
+      <li><a href="https://commonslibrary.parliament.uk/research-briefings/cbp-10489/" target="_blank" rel="noopener">How much legislation does the UK Parliament consider?</a> &mdash; House of Commons Library (36 Acts a year; 1,500&ndash;2,000 SIs a year)</li>
+      <li><a href="https://www.hansardsociety.org.uk/publications/guides/delegated-legislation-frequently-asked-questions" target="_blank" rel="noopener">Delegated legislation: frequently asked questions</a> &mdash; Hansard Society (16 rejections since 1950; no amendment power; procedure shares)</li>
+      <li><a href="https://commonslibrary.parliament.uk/research-briefings/cbp-8934/" target="_blank" rel="noopener">The Adoption and Children (Coronavirus) (Amendment) Regulations</a> &mdash; House of Commons Library</li>
+      <li><a href="https://committees.parliament.uk/committee/255/secondary-legislation-scrutiny-committee/" target="_blank" rel="noopener">Secondary Legislation Scrutiny Committee</a> &mdash; UK Parliament</li>
+      <li><a href="https://www.gov.uk/government/news/new-regulations-for-schools-in-next-stage-of-attendance-drive" target="_blank" rel="noopener">New regulations for schools in next stage of attendance drive</a> &mdash; Department for Education, 29 February 2024</li>
+      <li><a href="https://www.gov.uk/government/consultations/machetes-and-other-bladed-articles-proposed-legislation/outcome/government-response-to-consultation-and-summary-of-public-responses-accessible" target="_blank" rel="noopener">Machetes and other bladed articles: government response to consultation</a> &mdash; Home Office, August 2023</li>
+      <li><a href="https://www.gov.uk/government/news/national-living-wage-to-increase-to-1221-in-april-2025" target="_blank" rel="noopener">National Living Wage to increase to &pound;12.21 in April 2025</a> and the <a href="https://questions-statements.parliament.uk/written-statements/detail/2024-07-30/hcws43" target="_blank" rel="noopener">July 2024 Low Pay Commission remit</a> &mdash; GOV.UK and UK Parliament</li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+const YEARS = [
+  {y:2018, n:862}, {y:2019, n:848}, {y:2020, n:1020}, {y:2021, n:770},
+  {y:2022, n:755}, {y:2023, n:707}, {y:2024, n:681}, {y:2025, n:574}
+];
+const ACTS_AVG = 36;
+
+function drawChart(){
+  const box = document.getElementById('chartbox');
+  const W = 560, H = 272, padL = 42, padR = 14, padT = 16, padB = 68;
+  const maxV = 1100;
+  const iw = W - padL - padR, ih = H - padT - padB;
+  const bw = iw / YEARS.length;
+  const y = v => padT + ih - (v / maxV) * ih;
+
+  let g = '';
+  [0,250,500,750,1000].forEach(t=>{
+    g += `<line x1="${padL}" y1="${y(t)}" x2="${W-padR}" y2="${y(t)}" stroke="var(--line)" stroke-width="1"/>`;
+    g += `<text x="${padL-8}" y="${y(t)+4}" text-anchor="end" fill="var(--ink3)" font-size="10.5" font-family="IBM Plex Mono, monospace">${t}</text>`;
+  });
+
+  YEARS.forEach((d,i)=>{
+    const x = padL + i*bw + bw*0.18, w = bw*0.64;
+    const top = y(d.n);
+    g += `<rect x="${x}" y="${top}" width="${w}" height="${padT+ih-top}" fill="var(--accent)" opacity="0.85" rx="1"/>`;
+    g += `<text x="${x+w/2}" y="${top-6}" text-anchor="middle" fill="var(--ink2)" font-size="10.5" font-weight="600" font-family="IBM Plex Mono, monospace">${d.n}</text>`;
+    g += `<text x="${x+w/2}" y="${padT+ih+16}" text-anchor="middle" fill="var(--ink3)" font-size="10.5" font-family="IBM Plex Mono, monospace">${d.y}</text>`;
+  });
+
+  const ay = y(ACTS_AVG);
+  g += `<line x1="${padL}" y1="${ay}" x2="${W-padR}" y2="${ay}" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+  g += `<line x1="${padL+2}" y1="${ay}" x2="${padL+2}" y2="${padT+ih+34}" stroke="var(--ink)" stroke-width="1"/>`;
+  g += `<text x="${padL+8}" y="${padT+ih+38}" fill="var(--ink)" font-size="11" font-weight="600" font-family="IBM Plex Sans, sans-serif">36 &mdash; Acts of Parliament, average per year</text>`;
+  g += `<text x="${W-padR}" y="${H-6}" text-anchor="end" fill="var(--ink3)" font-size="9.5" font-family="IBM Plex Sans, sans-serif">Source: Data Graphs parliamentary procedure dataset; House of Commons Library</text>`;
+
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:480px;display:block" role="img" aria-label="Bar chart: between 574 and 1020 statutory instruments were laid before Parliament each year from 2018 to 2025, against an average of 36 Acts of Parliament a year.">${g}</svg>`;
+}
+
+const CASES = [
+  {
+    id:'education',
+    kicker:'Education',
+    name:'The register',
+    note:'Who counts as absent, and who decides',
+    si:'SI 2024/208',
+    title:'School Attendance (Pupil Registration) (England) Regulations 2024',
+    proc:'Made negative',
+    dept:'Department for Education',
+    act:'Education Act 1996',
+    actLink:'https://www.legislation.gov.uk/id/ukpga/1996/56',
+    legLink:'https://www.legislation.gov.uk/uksi/2024/208/made',
+    track:'https://statutoryinstruments.parliament.uk/instrument/pNxUShuI',
+    what:'These regulations rewrote the rules every state school in England follows on its admission and attendance registers: how registers must be kept, the codes used to record each absence, when a pupil can be taken off the roll, and what schools must report to the local authority. Those codes are the raw material of every attendance statistic, every fine and every prosecution of a parent.',
+    socio:[
+      ['Social control','A register is a surveillance instrument. Compulsory schooling is enforced through it, and the enforcement falls on parents.'],
+      ['The state and the family','The rule sets the boundary between parental authority and state authority over a child&rsquo;s time.'],
+      ['Power without visibility','No MP spoke about this. It was law before a single member of the public could have read it.']
+    ],
+    pol:{
+      when:'Laid 29 February 2024',
+      party:'Conservative', partyClass:'con', partySub:'In office since 2010; 14 years in',
+      pm:'Rishi Sunak', pmSub:'Prime Minister since October 2022',
+      minister:'Gillian Keegan', ministerSub:'Secretary of State for Education',
+      title:'The post-pandemic attendance drive',
+      body:'<p>Keegan announced this package publicly on <strong>29 February 2024 &mdash; the same day the instrument was laid</strong>. The government&rsquo;s framing was a post-Covid &ldquo;attendance crisis&rdquo;: a rise in persistent absence blamed on broken habits and on new barriers such as mental ill health. The Commons Education Committee had reported on the same problem.</p><p>The regulations were one piece of a larger move. The same package required every state school to share its daily register with the Department for Education, made the <em>Working together to improve school attendance</em> guidance statutory from August 2024, and introduced a national framework for fining parents &mdash; raising the penalty from &pound;60 to &pound;80. Ministers described the approach as &ldquo;support first&rdquo;, while building it on a standardised system of fines and data collection.</p>'
+    },
+    anchor:'2024-02-29',
+    steps:[
+      {d:'2024-02-27', t:'Signed by a minister', tag:'gov', why:'The instrument is created and made on the same day. From this moment it is law &mdash; no vote, no debate, no publication requirement yet.', link:'https://www.legislation.gov.uk/uksi/2024/208/made', pivot:true},
+      {d:'2024-02-29', t:'Laid before the Commons and the Lords', tag:'gov', why:'The Department for Education formally registers the paper with both Houses. This is what starts the objection clock.', link:'https://commonsbusiness.parliament.uk/Document/85637/Html?subType=Standard#anchor-29'},
+      {d:'2024-03-12', t:'Secondary Legislation Scrutiny Committee considers it', tag:'hl', why:'The Lords committee that asks whether an instrument is politically or legally important. It published an information paragraph &mdash; worth flagging to the House, but not drawn to its special attention.', link:'https://publications.parliament.uk/pa/ld5804/ldselect/ldsecleg/83/8304.htm#_idTextAnchor005'},
+      {d:'2024-04-24', t:'Joint Committee on Statutory Instruments finds no fault', tag:'jt', why:'The JCSI checks technical quality only: is it within the power granted, is it properly drafted. It does not comment on whether the policy is a good idea. Not drawn to special attention.', link:'https://publications.parliament.uk/pa/jt5804/jtselect/jtstatin/104/report.html#heading-1'},
+      {d:'2024-04-26', t:'Objection period ends. No prayer was ever tabled.', tag:'gov', why:'Nobody in either House moved to annul it. Under the negative procedure that is all it takes.', pivot:true},
+      {d:'2024-04-26', t:'Instrument remains law &middot; procedure concluded in both Houses', tag:'gov', why:'The parliamentary stage is over. Total elapsed time from signature to conclusion: 59 days, none of it spent on the floor of either House.'},
+      {d:'2024-08-19', t:'Comes into force in every state school in England', tag:'gov', why:'Roughly six months after a minister signed it, and without a single vote, the rules governing millions of pupils&rsquo; attendance records changed.', link:'https://www.legislation.gov.uk/uksi/2024/208/made'}
+    ],
+    verdict:'<strong>Nobody objected, so it became law.</strong> This is the ordinary case &mdash; and the reason secondary legislation matters sociologically. A rule reaching every school in England passed through Parliament without one minute of debate in either chamber. The only scrutiny came from two committees, one of which was checking the drafting rather than the policy.',
+    notdone:'For an essay: this is the procedural version of Steven Lukes&rsquo; third face of power. Nothing was suppressed. The decision simply never became a public issue in the first place.'
+  },
+  {
+    id:'families',
+    kicker:'Families and households',
+    name:'Children in care',
+    note:'Safeguards removed in three days',
+    si:'SI 2020/445',
+    title:'Adoption and Children (Coronavirus) (Amendment) Regulations 2020',
+    proc:'Made negative',
+    dept:'Department for Education',
+    act:'Adoption and Children Act 2002, Children Act 2004, Care Standards Act 2000 and others',
+    actLink:'https://www.legislation.gov.uk/id/ukpga/2002/38',
+    legLink:'https://www.legislation.gov.uk/uksi/2020/445/made',
+    track:'https://statutoryinstruments.parliament.uk/instrument/oj6GdWyC',
+    what:'In April 2020 these regulations relaxed a large number of statutory duties and timescales owed to children in care in England: how often social workers had to visit, how quickly reviews had to happen, how care placements were approved and inspected. They were made on a Tuesday and were law by the Friday, before Parliament had any opportunity to look at them.',
+    socio:[
+      ['The state as parent','Children in care are the clearest case of the state taking on the family role. This shows how conditionally that role is held.'],
+      ['Whose voice counts','The Children&rsquo;s Commissioner and children&rsquo;s charities were not consulted. A court later held that was unlawful.'],
+      ['Emergency as a mechanism','Crisis widens executive power. Studying which duties were relaxed first tells you which groups carry least weight.']
+    ],
+    pol:{
+      when:'Laid 23 April 2020',
+      party:'Conservative', partyClass:'con', partySub:'Elected with an 80-seat majority in December 2019',
+      pm:'Boris Johnson', pmSub:'In intensive care 6&ndash;12 April; Dominic Raab deputised until 27 April',
+      minister:'Gavin Williamson', ministerSub:'Secretary of State for Education',
+      title:'Emergency &ldquo;flexibilities&rdquo; in the first lockdown',
+      body:'<p>These regulations were made and laid during the first national lockdown, and in the specific window when <strong>the Prime Minister was absent</strong> &mdash; Johnson had been discharged from intensive care on 12 April and did not return to work until 27 April, four days after the instrument was laid. Dominic Raab was deputising.</p><p>The government&rsquo;s stated agenda was giving local authorities flexibility to keep children&rsquo;s services running while staff were ill or isolating. Note a detail worth an essay paragraph: the regulations were made under <strong>ordinary powers in the Adoption and Children Act 2002 and related Acts, not under the Coronavirus Act 2020</strong>. That mattered, because the emergency Act carried extra parliamentary safeguards &mdash; reporting and renewal votes &mdash; that these regulations therefore escaped. Children&rsquo;s charities argued the crisis was a reason to strengthen safeguards, not suspend them.</p>'
+    },
+    anchor:'2020-04-23',
+    steps:[
+      {d:'2020-04-21', t:'Signed by a minister', tag:'gov', why:'Created and made the same day, with no prior consultation of the Children&rsquo;s Commissioner or the children&rsquo;s sector.', link:'https://www.legislation.gov.uk/uksi/2020/445/made', pivot:true},
+      {d:'2020-04-23', t:'Laid before the Commons and the Lords', tag:'gov', why:'Two days after signature. The 40-day objection clock starts here.', link:'https://lordsbusiness.parliament.uk/ItemOfBusiness?itemOfBusinessId=75040&sectionId=54&businessPaperDate=2020-04-28'},
+      {d:'2020-04-24', t:'Comes into force', tag:'gov', why:'One day after laying. The duties owed to children in care had already changed before any MP or peer had examined the text.', link:'https://www.legislation.gov.uk/uksi/2020/445/made', pivot:true},
+      {d:'2020-05-04', t:'Prayer to annul tabled in the Commons', tag:'hc', why:'A motion to strike the instrument down, tabled as an Early Day Motion. Any MP can table one. The government decides whether it is ever debated.', link:'https://edm.parliament.uk/early-day-motion/56926', pivot:true},
+      {d:'2020-05-05', t:'SLSC draws it to the special attention of the House', tag:'hl', why:'The Lords committee reported it as politically or legally important &mdash; its strongest routine signal. This is the step outside organisations can influence with written evidence.', link:'https://publications.parliament.uk/pa/ld5801/ldselect/ldsecleg/57/5704.htm#_idTextAnchor008'},
+      {d:'2020-05-06', t:'Committee publishes the evidence it received', tag:'hl', why:'Three further documents published. Submissions from charities and professionals became part of the parliamentary record.', link:'https://committees.parliament.uk/publications/984/documents/7645/default/'},
+      {d:'2020-05-20', t:'JCSI reports it defectively drafted and requiring elucidation', tag:'jt', why:'Two separate technical grounds. This committee rarely criticises, and criticism carries weight &mdash; but it has no power to stop anything.', link:'https://publications.parliament.uk/pa/jt5801/jtselect/jtstatin/64/6403.htm#_idTextAnchor006'},
+      {d:'2020-06-10', t:'Debated on the floor of the House of Commons', tag:'hc', why:'The prayer was actually debated &mdash; unusual, and a direct result of sustained public and press pressure. Most prayers never get this far.', link:'https://hansard.parliament.uk/Commons/2020-06-10/debates/5964F78B-8FEA-441B-A146-889607FBFA21/ChildrenAndYoungPersons', pivot:true},
+      {d:'2020-06-10', t:'The vote is taken. The prayer is rejected.', tag:'hc', why:'The government majority holds. The instrument survives. Even a debated prayer is a yes-or-no vote on the whole instrument, with no possibility of amending it.', link:'https://publications.parliament.uk/pa/cm5801/cmvote/200610v01.html#anchor-8', pivot:true},
+      {d:'2020-06-13', t:'Objection period ends &middot; instrument remains law', tag:'gov', why:'Procedure concluded in both Houses. Parliament&rsquo;s role is finished.'}
+    ],
+    verdict:'<strong>Every scrutiny mechanism fired, and the instrument still stood.</strong> A prayer was tabled, both committees criticised it, it was debated on the floor of the Commons and put to a division. It passed anyway. The regulations were later allowed to expire in September 2020, and in November 2020 the Court of Appeal held that the Education Secretary had acted unlawfully in failing to consult the Children&rsquo;s Commissioner and others before making them.',
+    notdone:'For an essay: use this as the contrast case to the education example. It shows that the scrutiny process is real but weak &mdash; and that the effective check came from a charity in the courts, not from Parliament.'
+  },
+  {
+    id:'crime',
+    kicker:'Crime and deviance',
+    name:'Zombie-style knives',
+    note:'A new offence, created by order',
+    si:'Draft order, later SI 2024/583',
+    title:'Criminal Justice Act 1988 (Offensive Weapons) (Amendment, Surrender and Compensation) Order 2024',
+    proc:'Draft affirmative',
+    dept:'Home Office',
+    act:'Criminal Justice Act 1988',
+    actLink:'https://www.legislation.gov.uk/id/ukpga/1988/33',
+    legLink:'https://www.legislation.gov.uk/uksi/2024/583/made',
+    track:'https://statutoryinstruments.parliament.uk/instrument/Ie659lQb',
+    what:'This order added zombie-style knives and machetes to the list of weapons it is an offence to possess, sell or import, and set up a surrender and compensation scheme for people handing them in. A new criminal offence, carrying a prison sentence, created by a minister under a power granted in 1988 &mdash; not by a new Act.',
+    socio:[
+      ['Moral panic','A textbook Cohen sequence: media amplification of a folk devil, public concern, then a swift and symbolic state response. Ask what the ban measurably changes.'],
+      ['Labelling','The order does not describe a behaviour. It defines an object, and by extension a type of person who carries it.'],
+      ['The state&rsquo;s symbolic function','Creating an offence is cheap, fast and visible. Addressing the conditions behind knife carrying is none of those things.']
+    ],
+    pol:{
+      when:'Laid 25 January 2024',
+      party:'Conservative', partyClass:'con', partySub:'Final full year before the July 2024 general election',
+      pm:'Rishi Sunak', pmSub:'Prime Minister since October 2022',
+      minister:'James Cleverly', ministerSub:'Home Secretary',
+      title:'Knife crime as an election issue',
+      body:'<p>The Home Office consulted on banning machetes and zombie-style knives in spring 2023 and announced the ban in <strong>August 2023</strong>. The order was then laid in January 2024 and did not take legal effect until <strong>September 2024 &mdash; more than a year after the announcement</strong>. The Mayor of London publicly attacked that delay, arguing lives were being lost while the paperwork moved.</p><p>The order also sat alongside the Criminal Justice Bill, which was before Parliament at the same time. Knife crime was a live campaign theme for both main parties in the run-up to the 2024 election. The gap between the press announcement and the law actually changing is the useful thing here: the announcement is the political act, and the statutory instrument is where the announcement either becomes real or quietly does not.</p>'
+    },
+    anchor:'2024-01-25',
+    steps:[
+      {d:'2024-01-25', t:'Draft laid before both Houses. It is not law yet.', tag:'gov', why:'Under the affirmative procedure the instrument is a draft with no legal effect until both Houses approve it. That is the crucial difference from the two negative examples.', link:'https://www.legislation.gov.uk/ukdsi/2024/9780348256871', pivot:true},
+      {d:'2024-01-25', t:'Government tables a motion to approve it in the Commons', tag:'hc', why:'Nothing can be debated until the government tables the motion. The government controls both the text and the timetable.', link:'https://commonsbusiness.parliament.uk/Document/84573/Html?subType=Standard#20240126-308'},
+      {d:'2024-02-06', t:'SLSC draws it to the special attention of the House', tag:'hl', why:'The ground given was insufficient explanatory material &mdash; the department had not explained itself well enough for the House to judge the instrument.', link:'https://publications.parliament.uk/pa/ld5804/ldselect/ldsecleg/59/5903.htm', pivot:true},
+      {d:'2024-02-07', t:'JCSI finds no technical fault', tag:'jt', why:'Properly drafted and within the 1988 Act&rsquo;s power. The committee takes no view on whether banning the weapons is wise.', link:'https://publications.parliament.uk/pa/jt5804/jtselect/jtstatin/61/report.html#heading-1'},
+      {d:'2024-04-18', t:'Debated in the Lords Grand Committee', tag:'hl', why:'Not the chamber, but a committee room. Most affirmative instruments are debated away from the main floor, which is part of why they attract so little attention.', link:'https://hansard.parliament.uk/lords/2024-04-18/debates/856B1916-C50C-42E8-9224-650176B31877/CriminalJusticeAct1988(OffensiveWeapons)(AmendmentSurrenderAndCompensation)Order2024'},
+      {d:'2024-04-23', t:'Debated in a Commons Delegated Legislation Committee', tag:'hc', why:'A small committee of MPs, typically 17, meeting for up to 90 minutes. Its motion is only that it has considered the instrument.', link:'https://hansard.parliament.uk/Commons/2024-04-23/debates/8b671c78-b88e-4a2d-afba-39ea9fba00a2/DraftCriminalJusticeAct1988(OffensiveWeapons)(AmendmentSurrenderAndCompensation)Order2024'},
+      {d:'2024-04-23', t:'Approved by the House of Lords', tag:'hl', why:'The Lords gives its consent. One House down.', link:'https://lordsbusiness.parliament.uk/ItemOfBusiness?itemOfBusinessId=140319&sectionId=40&businessPaperDate=2024-04-23'},
+      {d:'2024-04-24', t:'Approved by the House of Commons', tag:'hc', why:'Both Houses have now said yes. Only at this point can the instrument be signed.', link:'https://commonsbusiness.parliament.uk/Document/87007/Html?subType=Standard#anchor-12', pivot:true},
+      {d:'2024-04-30', t:'Signed into law as SI 2024/583', tag:'gov', why:'The minister signs last, not first. Possessing a zombie-style knife became a criminal offence when the order came into force later that year.', link:'https://www.legislation.gov.uk/uksi/2024/583/made', pivot:true}
+    ],
+    verdict:'<strong>Both Houses had to actively say yes &mdash; and both did.</strong> The affirmative procedure is genuinely stronger: 95 days, two debates, two votes, and a committee criticism of the department&rsquo;s explanation. But note what did not happen. No MP could change a word of the definition of a zombie-style knife. The choice was the whole order or nothing.',
+    notdone:'For an essay: a new criminal offence created without a new Act is a good concrete answer to the question &ldquo;where does the power to define deviance actually sit?&rdquo;'
+  },
+  {
+    id:'work',
+    kicker:'Work, poverty and welfare',
+    name:'The minimum wage',
+    note:'Millions of pay packets, one motion',
+    si:'Draft regulations, later SI 2025/401',
+    title:'National Minimum Wage (Amendment) Regulations 2025',
+    proc:'Draft affirmative',
+    dept:'Department for Business and Trade',
+    act:'National Minimum Wage Act 1998',
+    actLink:'https://www.legislation.gov.uk/id/ukpga/1998/39',
+    legLink:'https://www.legislation.gov.uk/uksi/2025/401/made',
+    track:'https://statutoryinstruments.parliament.uk/instrument/PWSt974O',
+    what:'The National Minimum Wage Act 1998 does not contain a wage rate. It creates the machinery &mdash; a Low Pay Commission that advises, and a power for ministers to set the figures. The actual rates that determine what millions of people are paid are set by regulations like these, every year, under the affirmative procedure.',
+    socio:[
+      ['Where redistribution happens','The single biggest annual decision about low pay in Britain is taken in a committee room, not in a Budget or an Act.'],
+      ['Expertise and legitimacy','Ministers act on Low Pay Commission advice. This is technocratic governance: the political choice is dressed as a technical one.'],
+      ['The limits of consent','MPs vote yes or no on the whole rate card. No MP can propose a different figure.']
+    ],
+    pol:{
+      when:'Laid 4 February 2025',
+      party:'Labour', partyClass:'lab', partySub:'Elected July 2024, ending 14 years of Conservative government',
+      pm:'Keir Starmer', pmSub:'Prime Minister since July 2024',
+      minister:'Jonathan Reynolds', ministerSub:'Secretary of State for Business and Trade',
+      title:'Labour&rsquo;s Plan to Make Work Pay',
+      body:'<p>This is the one case here made by a different party, and the change of government is visible in the numbers. In <strong>July 2024, weeks after taking office, Labour rewrote the Low Pay Commission&rsquo;s remit</strong>, requiring it for the first time to take the cost of living into account when recommending rates, and setting an ambition to remove the age bands altogether so that under-21s are paid the adult rate.</p><p>The effect: the adult National Living Wage rose 6.7% (&pound;11.44 to &pound;12.21), but the 18&ndash;20 rate rose <strong>16.3%</strong> (&pound;8.60 to &pound;10.00) and the 16&ndash;17 and apprentice rate rose 18.0% (&pound;6.40 to &pound;7.55), deliberately narrowing the gap. The Commission reported in October 2024, the government accepted the figures in full, and these regulations turned them into law.</p><p>The Act granting the power is from 1998. The policy direction changed in 2024. Nothing in the Act had to change for that to happen &mdash; which is exactly the point of a delegated power.</p>'
+    },
+    anchor:'2025-02-04',
+    steps:[
+      {d:'2025-02-04', t:'Draft laid before both Houses', tag:'gov', why:'Following the Low Pay Commission&rsquo;s annual recommendations. The draft has no legal force until approved.', link:'https://www.legislation.gov.uk/ukdsi/2025/9780348268492', pivot:true},
+      {d:'2025-02-05', t:'Government tables a motion to approve it in the Commons', tag:'hc', why:'The clock on the debate is set by the government, and the timetable is built around the 1 April start of the pay year.', link:'https://commonsbusiness.parliament.uk/Document/92246/Html?subType=Standard#20250205-145'},
+      {d:'2025-02-25', t:'SLSC considers it and makes no comment', tag:'hl', why:'Routine. The committee judged there was nothing the House needed to be alerted to &mdash; which is the outcome for most instruments.', link:'https://publications.parliament.uk/pa/ld5901/ldselect/ldsecleg/84/8405.htm'},
+      {d:'2025-02-26', t:'JCSI finds no technical fault', tag:'jt', why:'Within the 1998 Act&rsquo;s power and properly drafted.', link:'https://publications.parliament.uk/pa/jt5901/jtselect/jtstatin/86/report.html#heading-2'},
+      {d:'2025-03-17', t:'Debated in the Lords Grand Committee', tag:'hl', why:'A committee-room debate on the rates for the coming year.', link:'https://hansard.parliament.uk/lords/2025-03-17/debates/66D0DEDB-4EF3-4702-B97E-3997996C6556/NationalMinimumWage(Amendment)Regulations2025'},
+      {d:'2025-03-18', t:'Approved by the House of Lords', tag:'hl', why:'Consent given by the second chamber.', link:'https://lordsbusiness.parliament.uk/ItemOfBusiness?itemOfBusinessId=152602&sectionId=40&businessPaperDate=2025-03-18'},
+      {d:'2025-03-25', t:'Debated and approved on the floor of the Commons', tag:'hc', why:'This one did reach the chamber rather than a delegated legislation committee &mdash; a mark of how politically salient the minimum wage is.', link:'https://hansard.parliament.uk/commons/2025-03-25/debates/9ABCDF0F-697F-4B3D-BF5A-923DC363EC20/TermsAndConditionsOfEmployment', pivot:true},
+      {d:'2025-03-26', t:'Signed into law as SI 2025/401', tag:'gov', why:'Approved by both Houses first, then made.', link:'https://www.legislation.gov.uk/uksi/2025/401/made'},
+      {d:'2025-04-01', t:'The new rates take effect', tag:'gov', why:'From this date every employer in the UK is legally bound by figures that were never written into any Act of Parliament.', link:'https://www.legislation.gov.uk/uksi/2025/401/made', pivot:true}
+    ],
+    verdict:'<strong>Fifty days from draft to signature, with the outcome never seriously in doubt.</strong> This is the affirmative procedure working as routine administration. The interesting sociological question is not whether Parliament consented &mdash; it did &mdash; but how a decision of this scale became routine in the first place.',
+    notdone:'For an essay: compare this with how much parliamentary time a single clause of a Bill can absorb. It is a sharp illustration of the gap between political attention and material consequence.'
+  }
+];
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fmtDate(iso){ const d = new Date(iso+'T00:00:00Z'); return d.getUTCDate()+' '+MONTHS[d.getUTCMonth()]+' '+d.getUTCFullYear(); }
+function dayGap(a,b){ return Math.round((new Date(b+'T00:00:00Z') - new Date(a+'T00:00:00Z'))/86400000); }
+const TAGNAME = {hc:'Commons', hl:'Lords', jt:'Joint committee', gov:'Government'};
+
+let active = 0, cursor = 0, showAll = false, timer = null;
+
+function buildTopics(){
+  const el = document.querySelector('.topics');
+  el.innerHTML = CASES.map((c,i)=>`
+    <button class="topic" role="tab" id="tab-${c.id}" aria-selected="${i===0}" aria-controls="case" data-i="${i}">
+      <span class="t-kicker">${c.kicker}</span>
+      <span class="t-name">${c.name}</span>
+      <span class="t-note">${c.note}</span>
+    </button>`).join('');
+  el.querySelectorAll('.topic').forEach(b=>{
+    b.addEventListener('click', ()=>select(+b.dataset.i));
+  });
+}
+
+function select(i){
+  stopPlay();
+  active = i; cursor = 0; showAll = false;
+  document.querySelectorAll('.topic').forEach((b,j)=>b.setAttribute('aria-selected', j===i));
+  renderCase();
+}
+
+function renderCase(){
+  const c = CASES[active];
+  document.getElementById('case').innerHTML = `
+    <div class="case-head">
+      <div class="si-num mono">${c.si} &middot; ${c.dept}</div>
+      <h3>${c.title}</h3>
+      <div class="chips">
+        <span class="chip proc">${c.proc}</span>
+        <span class="chip">${c.steps.length} recorded steps</span>
+        <span class="chip"><a href="${c.legLink}" target="_blank" rel="noopener" style="text-decoration:none">Full text on legislation.gov.uk &#8599;</a></span>
+        <span class="chip"><a href="${c.track}" target="_blank" rel="noopener" style="text-decoration:none">Track it in Parliament &#8599;</a></span>
+      </div>
+      <div class="power">
+        <span class="pk">Power<br>comes from</span>
+        <span class="pv">This instrument exists only because <em>${c.act}</em> gave a minister the power to make it. <a href="${c.actLink}" target="_blank" rel="noopener">Read the parent Act &#8599;</a></span>
+      </div>
+    </div>
+
+    <div class="case-body">
+      <div>
+        <div class="blockhead">What it actually does</div>
+        <p class="blocktext">${c.what}</p>
+      </div>
+      <div class="socio">
+        <div class="blockhead">Why a sociologist cares</div>
+        <ul>${c.socio.map(s=>`<li><b>${s[0]}.</b> ${s[1]}</li>`).join('')}</ul>
+      </div>
+    </div>
+
+    <div class="politics">
+      <div class="pol-head">
+        <div class="blockhead">Who was in power</div>
+        <span class="pol-when">${c.pol.when}</span>
+      </div>
+      <div class="pol-row">
+        <div class="pol-cell">
+          <div class="pol-k">Government</div>
+          <div class="pol-v"><span class="sw ${c.pol.partyClass}"></span>${c.pol.party}</div>
+          <div class="pol-sub">${c.pol.partySub}</div>
+        </div>
+        <div class="pol-cell">
+          <div class="pol-k">Prime Minister</div>
+          <div class="pol-v">${c.pol.pm}</div>
+          <div class="pol-sub">${c.pol.pmSub}</div>
+        </div>
+        <div class="pol-cell">
+          <div class="pol-k">Minister responsible</div>
+          <div class="pol-v">${c.pol.minister}</div>
+          <div class="pol-sub">${c.pol.ministerSub}</div>
+        </div>
+      </div>
+      <div class="pol-agenda">
+        <h4>${c.pol.title}</h4>
+        ${c.pol.body}
+      </div>
+    </div>
+
+    <div class="player">
+      <div class="player-top">
+        <div class="player-title">Play it out</div>
+        <div class="controls">
+          <button class="ctl" id="btn-prev">&#8249; Back</button>
+          <button class="ctl primary" id="btn-next">Next step &#8250;</button>
+          <button class="ctl" id="btn-play">Auto-play</button>
+          <button class="ctl" id="btn-all">Show everything</button>
+        </div>
+      </div>
+      <div class="progress"><i id="bar"></i></div>
+      <div class="steps" id="steps"></div>
+    </div>
+
+    <div class="verdict">
+      <div class="blockhead">What this case shows</div>
+      <p>${c.verdict}</p>
+      <p class="notdone">${c.notdone}</p>
+    </div>`;
+
+  document.getElementById('btn-prev').addEventListener('click', ()=>{ stopPlay(); showAll=false; cursor=Math.max(0,cursor-1); renderSteps(); });
+  document.getElementById('btn-next').addEventListener('click', ()=>{ stopPlay(); step(); });
+  document.getElementById('btn-play').addEventListener('click', togglePlay);
+  document.getElementById('btn-all').addEventListener('click', ()=>{ stopPlay(); showAll=!showAll; if(showAll) cursor=c.steps.length-1; renderSteps(); });
+  renderSteps();
+}
+
+function renderSteps(){
+  const c = CASES[active];
+  const wrap = document.getElementById('steps');
+  wrap.className = 'steps' + (showAll ? ' all' : '');
+  wrap.innerHTML = c.steps.map((s,i)=>{
+    const on = showAll || i<=cursor;
+    const gap = dayGap(c.anchor, s.d);
+    const gapLabel = gap===0 ? 'laying day' : (gap<0 ? Math.abs(gap)+' days before' : 'day '+gap);
+    return `
+      <div class="step ${on?'on':''} ${(!showAll && i===cursor)?'cur':''} ${s.tag} ${s.pivot?'pivot':''}">
+        <div class="s-day"><b>${fmtDate(s.d)}</b>${gapLabel}</div>
+        <div class="s-rail"><span class="s-dot"></span></div>
+        <div class="s-body">
+          <div class="s-what">${s.t}</div>
+          <div class="s-tags"><span class="tag ${s.tag}">${TAGNAME[s.tag]}</span>${s.pivot?'<span class="tag gov">Key moment</span>':''}</div>
+          ${s.why?`<p class="s-why">${s.why}</p>`:''}
+          ${s.link?`<a class="s-link" href="${s.link}" target="_blank" rel="noopener">See the source document &#8599;</a>`:''}
+        </div>
+      </div>`;
+  }).join('');
+
+  const pct = showAll ? 100 : ((cursor+1)/c.steps.length)*100;
+  document.getElementById('bar').style.width = pct+'%';
+  document.getElementById('btn-prev').disabled = showAll || cursor===0;
+  document.getElementById('btn-next').disabled = !showAll && cursor>=c.steps.length-1;
+  document.getElementById('btn-all').textContent = showAll ? 'Step through it' : 'Show everything';
+}
+
+function step(){
+  const c = CASES[active];
+  showAll = false;
+  if(cursor < c.steps.length-1){ cursor++; renderSteps(); return true; }
+  renderSteps(); return false;
+}
+function togglePlay(){
+  if(timer){ stopPlay(); return; }
+  showAll = false; cursor = 0; renderSteps();
+  document.getElementById('btn-play').textContent = 'Pause';
+  timer = setInterval(()=>{ if(!step()) stopPlay(); }, 2600);
+}
+function stopPlay(){
+  if(timer){ clearInterval(timer); timer = null; }
+  const b = document.getElementById('btn-play');
+  if(b) b.textContent = 'Auto-play';
+}
+
+drawChart();
+buildTopics();
+renderCase();
+</script>
+</body>
+</html>
