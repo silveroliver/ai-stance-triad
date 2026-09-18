@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="An interactive walkthrough of how UK secondary legislation works, following four real statutory instruments on education, families, crime and low pay step by step through Parliament.">
+<meta name="description" content="An interactive walkthrough of how UK secondary legislation works, following six real statutory instruments across four Prime Ministers, including one still awaiting approval.">
 <meta name="color-scheme" content="light dark">
 <meta property="og:title" content="The 40-Day Clock">
-<meta property="og:description" content="How UK secondary legislation really works, followed through four real statutory instruments.">
+<meta property="og:description" content="How UK secondary legislation really works, followed through six real statutory instruments.">
 <meta property="og:type" content="website">
 <style>
   :root{color-scheme:light dark; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -28,6 +28,7 @@
   --lords:#94293B; --lords-soft:#F5E4E7;
   --joint:#3A4A6E; --joint-soft:#E6EAF2;
   --con:#1B62A8; --lab:#C4161C;
+  --live:#8A5A00; --live-soft:#FBF0D8; --live-line:#E0BE7A;
   --shadow:0 1px 2px rgba(20,25,35,.06), 0 8px 24px -12px rgba(20,25,35,.18);
 }
 @media (prefers-color-scheme: dark){
@@ -40,6 +41,7 @@
     --lords:#E28A98; --lords-soft:#2F181C;
     --joint:#9AAAD0; --joint-soft:#1B212C;
     --con:#68A6E2; --lab:#EE6F74;
+    --live:#E3B558; --live-soft:#31280F; --live-line:#63501F;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
   }
 }
@@ -52,6 +54,7 @@
   --lords:#E28A98; --lords-soft:#2F181C;
   --joint:#9AAAD0; --joint-soft:#1B212C;
   --con:#68A6E2; --lab:#EE6F74;
+  --live:#E3B558; --live-soft:#31280F; --live-line:#63501F;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
 }
 
@@ -96,9 +99,9 @@ h2{font-size:clamp(24px,3.6vw,33px); font-weight:600; letter-spacing:-.01em; mar
 .fact span{display:block; margin-top:5px; font-size:13.5px; color:var(--ink2)}
 
 /* ---------- topic switcher ---------- */
-.topics{margin-top:26px; display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
-@media (max-width:860px){ .topics{grid-template-columns:repeat(2,1fr)} }
-@media (max-width:440px){ .topics{grid-template-columns:1fr} }
+.topics{margin-top:26px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px}
+@media (max-width:860px){ .topics{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:440px){ .topics{grid-template-columns:minmax(0,1fr)} }
 .topic{
   text-align:left; cursor:pointer; font:inherit; color:inherit;
   background:var(--surface); border:1px solid var(--line); border-radius:4px;
@@ -113,6 +116,7 @@ h2{font-size:clamp(24px,3.6vw,33px); font-weight:600; letter-spacing:-.01em; mar
 .topic[aria-selected="true"]{background:var(--accent-soft); border-color:var(--accent-line)}
 .topic[aria-selected="true"] .t-kicker{color:var(--accent)}
 .topic[aria-selected="true"] .t-note{color:var(--ink2)}
+.t-live{align-self:flex-start; margin-top:2px; font-size:10px; letter-spacing:.07em; text-transform:uppercase; font-weight:600; padding:2px 7px; border-radius:2px; background:var(--live-soft); color:var(--live); border:1px solid var(--live-line)}
 
 /* ---------- case ---------- */
 .case{margin-top:24px; background:var(--surface); border:1px solid var(--line); border-radius:5px; overflow:hidden; box-shadow:var(--shadow)}
@@ -159,41 +163,30 @@ h2{font-size:clamp(24px,3.6vw,33px); font-weight:600; letter-spacing:-.01em; mar
 
 /* ---------- player ---------- */
 .player{border-top:1px solid var(--line); background:var(--sunk); padding:22px 24px}
-.player-top{display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap}
+.player-top{display:flex; justify-content:space-between; align-items:baseline; gap:14px; flex-wrap:wrap}
 .player-title{font-family:"Source Serif 4",Georgia,serif; font-size:19px; font-weight:600}
-.controls{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-button.ctl{
-  font:inherit; font-size:13px; font-weight:500; cursor:pointer; color:var(--ink);
-  background:var(--surface); border:1px solid var(--line2); border-radius:3px; padding:6px 13px;
-  transition:background .15s, border-color .15s;
-}
-button.ctl:hover:not(:disabled){background:var(--surface2); border-color:var(--ink3)}
-button.ctl:disabled{opacity:.4; cursor:default}
-button.ctl:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
-button.ctl.primary{background:var(--accent); border-color:var(--accent); color:var(--ground)}
-button.ctl.primary:hover:not(:disabled){filter:brightness(1.08); background:var(--accent)}
-.progress{height:3px; background:var(--line); border-radius:2px; margin-top:16px; overflow:hidden}
-.progress i{display:block; height:100%; background:var(--accent); width:0; transition:width .35s ease}
+.player-note{font-size:12px; color:var(--ink3)}
+.legend{display:flex; gap:14px; flex-wrap:wrap; margin-top:12px; font-size:11.5px; color:var(--ink3)}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.legend i{width:9px; height:9px; border-radius:50%; display:inline-block}
+.legend i.k{background:var(--accent)} .legend i.c{background:var(--commons)}
+.legend i.l{background:var(--lords)} .legend i.j{background:var(--joint)}
+.legend i.s{background:var(--sunk); border:2px solid var(--live-line); box-sizing:border-box}
 
-.steps{margin-top:20px; display:flex; flex-direction:column; gap:0; position:relative}
-.step{
-  display:grid; grid-template-columns:76px 22px minmax(0,1fr); gap:0 12px;
-  padding:0; opacity:.3; transition:opacity .3s;
-}
-.step.on{opacity:1}
-.step.cur .s-body{background:var(--surface); border-color:var(--accent-line); box-shadow:var(--shadow)}
+.steps{margin-top:16px; display:flex; flex-direction:column; gap:0; position:relative}
+.step{display:grid; grid-template-columns:76px 22px minmax(0,1fr); gap:0 12px; padding:0}
 .s-day{text-align:right; font-size:11.5px; color:var(--ink3); padding-top:15px; line-height:1.3}
 .s-day b{display:block; font-size:14px; color:var(--ink2); font-weight:600}
 .s-rail{position:relative; display:flex; justify-content:center}
 .s-rail::before{content:""; position:absolute; top:0; bottom:0; width:1px; background:var(--line2)}
 .step:first-child .s-rail::before{top:20px}
 .step:last-child .s-rail::before{bottom:calc(100% - 20px)}
-.s-dot{position:relative; width:11px; height:11px; border-radius:50%; margin-top:15px; background:var(--ink3); border:2px solid var(--ground)}
-.step.cur .s-dot{box-shadow:0 0 0 4px var(--accent-soft)}
+.s-dot{position:relative; width:11px; height:11px; border-radius:50%; margin-top:15px; background:var(--ink3); border:2px solid var(--sunk)}
 .s-body{
-  border:1px solid transparent; border-radius:4px; padding:12px 14px; margin:5px 0;
-  transition:background .25s, border-color .25s, box-shadow .25s; min-width:0;
+  background:var(--surface); border:1px solid var(--line); border-radius:4px;
+  padding:12px 14px; margin:5px 0; min-width:0;
 }
+.step.pivot .s-body{border-color:var(--accent-line)}
 .s-what{font-size:15.5px; font-weight:600; line-height:1.35}
 .s-tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:7px}
 .tag{font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; font-weight:600; padding:2px 7px; border-radius:2px}
@@ -201,18 +194,25 @@ button.ctl.primary:hover:not(:disabled){filter:brightness(1.08); background:var(
 .tag.hl{background:var(--lords-soft); color:var(--lords)}
 .tag.jt{background:var(--joint-soft); color:var(--joint)}
 .tag.gov{background:var(--accent-soft); color:var(--accent)}
-.s-why{margin-top:9px; font-size:14px; color:var(--ink2); display:none}
-.step.cur .s-why, .steps.all .s-why{display:block}
+.s-why{margin-top:9px; font-size:14px; color:var(--ink2)}
 .s-link{display:inline-flex; align-items:center; gap:5px; margin-top:9px; font-size:12.5px; color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-line); padding-bottom:1px}
 .s-link:hover{border-bottom-color:var(--accent)}
-.s-why + .s-link{margin-top:9px}
-.step:not(.cur) .s-link{display:none}
-.steps.all .step .s-link{display:inline-flex}
+.step.soon .s-rail::before{background:repeating-linear-gradient(to bottom, var(--line2) 0 3px, transparent 3px 7px)}
+.step.soon .s-dot{width:11px; height:11px; margin-top:15px}
+.step.soon .s-what{color:var(--ink2); font-weight:500}
+.step.soon .s-body{border-color:var(--live-line); border-style:dashed; background:transparent}
+.tag.soon{background:var(--live-soft); color:var(--live); border:1px solid var(--live-line)}
+.livebar{display:flex; gap:12px; align-items:flex-start; margin-top:16px; padding:13px 15px; border:1px solid var(--live-line); background:var(--live-soft); border-radius:3px}
+.livebar .lb-dot{width:9px; height:9px; border-radius:50%; background:var(--live); flex-shrink:0; margin-top:6px}
+.livebar p{font-size:14px; color:var(--ink2)}
+.livebar p strong{color:var(--ink); font-weight:600}
+.livebar a{color:var(--live); font-weight:500}
 .step.pivot .s-dot{background:var(--accent); width:13px; height:13px; margin-top:14px}
 .step.hc .s-dot{background:var(--commons)}
 .step.hl .s-dot{background:var(--lords)}
 .step.jt .s-dot{background:var(--joint)}
 .step.pivot.hc .s-dot, .step.pivot.hl .s-dot{background:var(--accent)}
+.steps .step.soon .s-dot{background:var(--sunk); border:2px solid var(--live-line); width:12px; height:12px; margin-top:15px; box-shadow:none}
 @media (max-width:520px){
   .step{grid-template-columns:58px 20px minmax(0,1fr)}
   .s-day{font-size:10.5px}
@@ -262,7 +262,7 @@ footer li{margin-bottom:4px}
     <h1>The 40-Day Clock</h1>
     <p class="standfirst">Most of the law that shapes your school, your family, your policing and your pay is not passed by Parliament. It is signed by a minister and then quietly runs down a clock. Pick a topic and watch a real rule become law, step by step, with the real dates.</p>
     <div class="mast-meta">
-      <span class="mono">4 real statutory instruments</span>
+      <span class="mono">6 real statutory instruments</span>
       <span class="mono">Who was in power, and why it mattered</span>
       <span class="mono">Every step linked to its source</span>
     </div>
@@ -299,7 +299,7 @@ footer li{margin-bottom:4px}
   <div class="wrap">
     <div class="sec-label">Choose your topic</div>
     <h2>Pick a curriculum area and watch one rule play out</h2>
-    <p class="lede">Each of these is a real statutory instrument with a real procedural history, drawn from Parliament&rsquo;s own record. Two took the negative route and two the affirmative; three were made by a Conservative government and one by a Labour one. Each panel names the government, the Prime Minister and the minister who signed, and the party agenda the rule came out of.</p>
+    <p class="lede">Each of these is a real statutory instrument with a real procedural history, drawn from Parliament&rsquo;s own record. They span four Prime Ministers and two parties, two took the negative route and four the affirmative, and the last one has not finished yet. Each panel names the government, the Prime Minister and the minister responsible, and the party agenda the rule came out of.</p>
 
     <div class="topics" role="tablist" aria-label="Curriculum topic"></div>
 
@@ -369,7 +369,10 @@ footer li{margin-bottom:4px}
       <li><a href="https://www.gov.uk/government/news/new-regulations-for-schools-in-next-stage-of-attendance-drive" target="_blank" rel="noopener">New regulations for schools in next stage of attendance drive</a> &mdash; Department for Education, 29 February 2024</li>
       <li><a href="https://www.gov.uk/government/consultations/machetes-and-other-bladed-articles-proposed-legislation/outcome/government-response-to-consultation-and-summary-of-public-responses-accessible" target="_blank" rel="noopener">Machetes and other bladed articles: government response to consultation</a> &mdash; Home Office, August 2023</li>
       <li><a href="https://www.gov.uk/government/news/national-living-wage-to-increase-to-1221-in-april-2025" target="_blank" rel="noopener">National Living Wage to increase to &pound;12.21 in April 2025</a> and the <a href="https://questions-statements.parliament.uk/written-statements/detail/2024-07-30/hcws43" target="_blank" rel="noopener">July 2024 Low Pay Commission remit</a> &mdash; GOV.UK and UK Parliament</li>
+      <li><a href="https://www.gov.uk/government/consultations/expanding-the-warm-home-discount-scheme-2025-to-2026" target="_blank" rel="noopener">Expanding the Warm Home Discount scheme</a> and the <a href="https://www.gov.uk/government/publications/warm-home-discount-eligibility-statement-england-and-wales-2026-to-2027-scheme-year" target="_blank" rel="noopener">2026 to 2027 eligibility statement</a> &mdash; GOV.UK (household numbers and levy figures)</li>
+      <li><a href="https://www.gov.uk/government/publications/awaabs-law-phase-2-guidance-for-social-housing-landlords" target="_blank" rel="noopener">Awaab&rsquo;s Law phase 2: guidance for social housing landlords</a> &mdash; GOV.UK, and <a href="https://www.cih.org/news/second-phase-of-awaabs-law-laid-before-parliament/" target="_blank" rel="noopener">Second phase of Awaab&rsquo;s Law laid before Parliament</a> &mdash; Chartered Institute of Housing</li>
     </ul>
+    <p style="margin-top:14px"><strong style="color:var(--ink)">Status note.</strong> The procedural data on this page was read on 18 September 2026. Five of the six instruments are concluded and will not change. The sixth, Awaab&rsquo;s Law phase 2, was still awaiting approval at that point; check its Parliament page for the current position before relying on the status shown here.</p>
   </div>
 </footer>
 
@@ -578,6 +581,90 @@ const CASES = [
     ],
     verdict:'<strong>Fifty days from draft to signature, with the outcome never seriously in doubt.</strong> This is the affirmative procedure working as routine administration. The interesting sociological question is not whether Parliament consented &mdash; it did &mdash; but how a decision of this scale became routine in the first place.',
     notdone:'For an essay: compare this with how much parliamentary time a single clause of a Bill can absorb. It is a sharp illustration of the gap between political attention and material consequence.'
+  },
+  {
+    id:'energy',
+    kicker:'Energy and fuel poverty',
+    name:'The &pound;150 rebate',
+    note:'Who pays, and who gets help',
+    si:'Draft regulations, later SI 2026/389',
+    title:'Warm Home Discount (England and Wales) Regulations 2026',
+    proc:'Draft affirmative',
+    dept:'Department for Energy Security and Net Zero',
+    act:'Energy Act 2010',
+    actLink:'https://www.legislation.gov.uk/id/ukpga/2010/27',
+    legLink:'https://www.legislation.gov.uk/uksi/2026/389/made',
+    track:'https://statutoryinstruments.parliament.uk/instrument/CLpJS0tN',
+    what:'The Warm Home Discount takes &pound;150 off the winter electricity bill of households on means-tested benefits. This instrument set the rules for the 2026 to 2027 scheme year: who qualifies, on what date, and what suppliers must do. The crucial design feature is how it is paid for. It is not funded from taxation. Energy suppliers are obliged to provide the rebates and recover the cost through a levy spread across every domestic gas and electricity customer.',
+    socio:[
+      ['Horizontal redistribution','Money moves between households on the same energy bill, not from the wealthy through the tax system. A low-income household just outside the benefit criteria pays in and gets nothing back.'],
+      ['Universalism and selectivism','The classic social policy divide, in one scheme. In 2025 the government widened it from 3.4 to about 6.1 million households by dropping a property test, at a cost of roughly &pound;15 a year on every bill.'],
+      ['Hidden taxation','A levy on bills is a tax that never appears in a Budget and is never voted on as one. Who notices a charge like this, and who has the resources to object to it?']
+    ],
+    pol:{
+      when:'Laid 2 February 2026',
+      party:'Labour', partyClass:'lab', partySub:'Second full year of the Starmer government',
+      pm:'Keir Starmer', pmSub:'Prime Minister until July 2026',
+      minister:'Ed Miliband', ministerSub:'Secretary of State for Energy Security and Net Zero',
+      title:'Fuel poverty and the cost of the energy transition',
+      body:'<p>The scheme itself dates from the Energy Act 2010, passed under a Labour government and then run by Coalition and Conservative ministers for fourteen years. It has been continued and reshaped by every government since, always by statutory instrument and never by a new Act. That is the point worth drawing out: the same delegated power has carried four very different political programmes.</p><p>The Starmer government&rsquo;s own change came in 2025, when it removed the &ldquo;high cost to heat&rdquo; property test so that every household on a qualifying means-tested benefit became eligible. That added about <strong>2.7 million households, taking the total to roughly 6.1 million</strong>, and raised the levy on the average dual-fuel bill from about &pound;22 to &pound;37 a year. Ministers argued this was the fastest way to reach fuel-poor households; critics pointed out that the money comes from other bill payers rather than from general taxation.</p>'
+    },
+    anchor:'2026-02-02',
+    steps:[
+      {d:'2026-02-02', t:'Draft laid before both Houses', tag:'gov', why:'Laid by the Department for Energy Security and Net Zero, in time for the scheme year beginning in April.', link:'https://www.legislation.gov.uk/ukdsi/2026/9780348279085', pivot:true},
+      {d:'2026-02-02', t:'Government tables a motion to approve it in the Commons', tag:'hc', why:'Tabled the same day it was laid. The government sets the timetable from the start.', link:'https://commonsbusiness.parliament.uk/Document/102146/Html?subType=Standard#20260203-138'},
+      {d:'2026-02-24', t:'SLSC considers it and makes no comment', tag:'hl', why:'Three weeks later. The Lords committee found nothing the House needed alerting to.', link:'https://publications.parliament.uk/pa/ld5901/ldselect/ldsecleg/266/26605.htm'},
+      {d:'2026-02-25', t:'JCSI finds no technical fault', tag:'jt', why:'Within the Energy Act 2010&rsquo;s power and properly drafted.', link:'https://publications.parliament.uk/pa/jt5901/jtselect/jtstatin/269/report.html#heading-1'},
+      {d:'2026-03-18', t:'Debated in a Commons Delegated Legislation Committee', tag:'hc', why:'A committee of MPs considers the instrument. The motion is only that it has been considered, not that it is approved.', link:'https://hansard.parliament.uk/commons/2026-03-18/debates/b6106b61-0949-431f-a850-8d510d58c8f4/DraftWarmHomeDiscount(EnglandAndWales)Regulations2026'},
+      {d:'2026-03-23', t:'Debated in the Lords Grand Committee', tag:'hl', why:'The parallel Lords debate, again away from the chamber.', link:'https://hansard.parliament.uk/lords/2026-03-23/debates/AC807CA6-DAB0-4AC3-BB67-62B8EB76CFDA/WarmHomeDiscount(EnglandAndWales)Regulations2026'},
+      {d:'2026-03-23', t:'Approved by the House of Commons', tag:'hc', why:'The vote in the chamber follows the committee debate the same week.', link:'https://commonsbusiness.parliament.uk/Document/103088/Html?subType=Standard#anchor-7', pivot:true},
+      {d:'2026-03-25', t:'Approved by the House of Lords &middot; procedure concluded', tag:'hl', why:'Both Houses have consented. The instrument can now be signed.', link:'https://lordsbusiness.parliament.uk/ItemOfBusiness?itemOfBusinessId=169224&sectionId=40&businessPaperDate=2026-03-25', pivot:true},
+      {d:'2026-03-27', t:'Signed into law as SI 2026/389', tag:'gov', why:'Fifty-three days from laying to signature.', link:'https://www.legislation.gov.uk/uksi/2026/389/made'},
+      {d:'2026-04-01', t:'In force for the 2026 to 2027 scheme year', tag:'gov', why:'The qualifying date for households falls in August, ahead of the winter rebates.', link:'https://www.legislation.gov.uk/uksi/2026/389/made', pivot:true}
+    ],
+    verdict:'<strong>A billion pounds moved between households, with no committee raising a concern.</strong> Both scrutiny committees passed it without comment, the debates were routine, and both Houses approved. That is not a failure of the process: the regulations were technically sound and politically uncontroversial. But notice what the process is not designed to ask. No stage of it examines whether funding fuel poverty relief through a flat levy on bills, rather than through taxation, is fair.',
+    notdone:'For an essay: this is a strong example of a policy decision hidden inside an administrative one. The distributional question was settled by the choice of funding mechanism years earlier, and the annual instrument never reopens it.'
+  },
+  {
+    id:'live',
+    kicker:'One to watch',
+    name:'Awaab&rsquo;s Law, phase 2',
+    note:'Laid under one Prime Minister, awaiting a decision from the next',
+    live:true,
+    si:'Draft regulations &middot; not yet law',
+    title:'Hazards in Social Housing (Prescribed Requirements) (England) (Amendment) Regulations 2026',
+    proc:'Draft affirmative &middot; in progress',
+    dept:'Ministry of Housing, Communities and Local Government',
+    act:'Landlord and Tenant Act 1985',
+    actLink:'https://www.legislation.gov.uk/id/ukpga/1985/70',
+    legLink:'https://www.legislation.gov.uk/ukdsi/2026/9780348285611',
+    track:'https://statutoryinstruments.parliament.uk/instrument/7dCUpkyO',
+    what:'Awaab&rsquo;s Law is named after Awaab Ishak, a two-year-old who died in 2020 after prolonged exposure to mould in his family&rsquo;s social housing flat in Rochdale. The first phase, in force from October 2025, gave social landlords fixed legal deadlines to investigate and fix damp and mould. This second phase extends those duties to a much wider set of hazards, including excess cold and heat, fire and electrical hazards, falls, structural collapse, and pests and hygiene. It is due to come into force on <strong>30 November 2026</strong>, and it is not law yet.',
+    socio:[
+      ['Housing, class and the body','Where you live determines what you breathe. This is material inequality with a measurable health outcome, and a named child at the centre of it.'],
+      ['Campaigns as a route to law','The duty exists because a bereaved family, a coroner and a sustained press campaign made it politically impossible to ignore. Compare that with the instruments nobody noticed.'],
+      ['Continuity of the state','Prime Ministers change; the instrument does not. It was laid under one government and has to be approved by another, under a deadline the previous one set.']
+    ],
+    pol:{
+      when:'Laid 13 July 2026, one week before the change of Prime Minister',
+      party:'Labour', partyClass:'lab', partySub:'Laid under Starmer; carried forward by the Burnham government',
+      pm:'Keir Starmer, then Andy Burnham', pmSub:'Burnham took office on 20 July 2026 without a general election',
+      minister:'Angela Rayner', ministerSub:'Secretary of State for Housing, Communities and Local Government',
+      title:'An instrument that outlived the government that laid it',
+      body:'<p>This is the clearest illustration on this page of why secondary legislation is worth watching. The draft was laid on <strong>13 July 2026</strong> and the motion to approve it was tabled in the Commons the same day. Keir Starmer resigned as Labour leader in June, Andy Burnham won the leadership unopposed, and on <strong>20 July 2026</strong> he became Prime Minister without a general election. Parliament then rose for the summer.</p><p>So the instrument sits in the queue. It was laid by one government and must be approved by another, which reshuffled the department that laid it. Angela Rayner returned to Housing, Communities and Local Government in the new Cabinet. Burnham came to the job as Mayor of Greater Manchester, the region where Awaab Ishak died, and has made housing and devolution central to his stated programme.</p><p><strong>Nothing about the 30 November deadline is automatic.</strong> If the approval motions are not moved and carried in both Houses in time, the duties do not start on that date. Watching whether that happens, and how quickly, is a live test of how much a change of Prime Minister actually changes.</p>'
+    },
+    anchor:'2026-07-13',
+    steps:[
+      {d:'2026-07-13', t:'Draft laid before the Commons and the Lords', tag:'gov', why:'Laid by the Ministry of Housing, Communities and Local Government. A draft has no legal effect: nothing has changed for any tenant yet.', link:'https://commonsbusiness.parliament.uk/Document/105386/Html?subType=Standard#anchor-38', pivot:true},
+      {d:'2026-07-13', t:'Government tables a motion to approve it in the Commons', tag:'hc', why:'Tabled the same day. This is the last step recorded in the procedure data.', link:'https://commonsbusiness.parliament.uk/Document/105388/Html?subType=Standard#20260714-150', pivot:true},
+      {d:null, t:'Scrutiny committees consider it', tag:'jt', soon:true, why:'The JCSI checks the drafting and whether it stays within the Landlord and Tenant Act 1985. The SLSC decides whether to draw it to the special attention of the Lords. Neither has reported yet.'},
+      {d:null, t:'Debate in each House', tag:'hc', soon:true, why:'Most likely a Delegated Legislation Committee in the Commons and Grand Committee in the Lords, as with the other affirmative instruments here.'},
+      {d:null, t:'Approval votes in both Houses', tag:'hl', soon:true, why:'Both must approve the whole text. Neither can amend a word of the hazard list.'},
+      {d:null, t:'Signed into law by a minister', tag:'gov', soon:true, why:'Only after both Houses have approved.'},
+      {d:'2026-11-30', t:'Intended commencement: duties apply to all social landlords in England', tag:'gov', soon:true, why:'The date written into the draft. It holds only if every step above is completed first.', pivot:true}
+    ],
+    verdict:'<strong>This one is not finished, which is exactly why it is here.</strong> Every other case on this page is history: you can read the ending. This one has a laid draft, a tabled motion, a deadline, and a change of Prime Minister in between. Each step above that is marked as still to come is a real decision someone has to take.',
+    notdone:'Track it yourself: the Parliament page for this instrument updates as each step happens, and the link is in the header above. The procedure data behind this page was read on 18 September 2026, so check the live tracker before relying on the status shown here.'
   }
 ];
 
@@ -586,7 +673,7 @@ function fmtDate(iso){ const d = new Date(iso+'T00:00:00Z'); return d.getUTCDate
 function dayGap(a,b){ return Math.round((new Date(b+'T00:00:00Z') - new Date(a+'T00:00:00Z'))/86400000); }
 const TAGNAME = {hc:'Commons', hl:'Lords', jt:'Joint committee', gov:'Government'};
 
-let active = 0, cursor = 0, showAll = false, timer = null;
+let active = 0;
 
 function buildTopics(){
   const el = document.querySelector('.topics');
@@ -595,6 +682,7 @@ function buildTopics(){
       <span class="t-kicker">${c.kicker}</span>
       <span class="t-name">${c.name}</span>
       <span class="t-note">${c.note}</span>
+      ${c.live?'<span class="t-live">Still in progress</span>':''}
     </button>`).join('');
   el.querySelectorAll('.topic').forEach(b=>{
     b.addEventListener('click', ()=>select(+b.dataset.i));
@@ -602,21 +690,22 @@ function buildTopics(){
 }
 
 function select(i){
-  stopPlay();
-  active = i; cursor = 0; showAll = false;
+  active = i;
   document.querySelectorAll('.topic').forEach((b,j)=>b.setAttribute('aria-selected', j===i));
   renderCase();
 }
 
 function renderCase(){
   const c = CASES[active];
+  const soon = c.steps.filter(s=>s.soon).length;
+  const done = c.steps.length - soon;
   document.getElementById('case').innerHTML = `
     <div class="case-head">
       <div class="si-num mono">${c.si} &middot; ${c.dept}</div>
       <h3>${c.title}</h3>
       <div class="chips">
         <span class="chip proc">${c.proc}</span>
-        <span class="chip">${c.steps.length} recorded steps</span>
+        <span class="chip">${done} recorded step${done===1?'':'s'}${soon?', '+soon+' still to come':''}</span>
         <span class="chip"><a href="${c.legLink}" target="_blank" rel="noopener" style="text-decoration:none">Full text on legislation.gov.uk &#8599;</a></span>
         <span class="chip"><a href="${c.track}" target="_blank" rel="noopener" style="text-decoration:none">Track it in Parliament &#8599;</a></span>
       </div>
@@ -624,6 +713,10 @@ function renderCase(){
         <span class="pk">Power<br>comes from</span>
         <span class="pv">This instrument exists only because <em>${c.act}</em> gave a minister the power to make it. <a href="${c.actLink}" target="_blank" rel="noopener">Read the parent Act &#8599;</a></span>
       </div>
+      ${c.live?`<div class="livebar">
+        <span class="lb-dot"></span>
+        <p><strong>This one has not finished.</strong> The steps below stop where Parliament&rsquo;s record stops. Everything after that is still to be decided, and you can follow it on the <a href="${c.track}" target="_blank" rel="noopener">live Parliament page for this instrument &#8599;</a></p>
+      </div>`:''}
     </div>
 
     <div class="case-body">
@@ -667,15 +760,16 @@ function renderCase(){
 
     <div class="player">
       <div class="player-top">
-        <div class="player-title">Play it out</div>
-        <div class="controls">
-          <button class="ctl" id="btn-prev">&#8249; Back</button>
-          <button class="ctl primary" id="btn-next">Next step &#8250;</button>
-          <button class="ctl" id="btn-play">Auto-play</button>
-          <button class="ctl" id="btn-all">Show everything</button>
-        </div>
+        <div class="player-title">${c.live ? 'What has happened so far' : 'How it became law'}</div>
+        <div class="player-note">${done} step${done===1?'':'s'} recorded in Parliament&rsquo;s procedural data${soon?', '+soon+' still to come':''}</div>
       </div>
-      <div class="progress"><i id="bar"></i></div>
+      <div class="legend">
+        <span><i class="k"></i> Key moment</span>
+        <span><i class="c"></i> Commons</span>
+        <span><i class="l"></i> Lords</span>
+        <span><i class="j"></i> Joint committee</span>
+        ${soon?'<span><i class="s"></i> Still to come</span>':''}
+      </div>
       <div class="steps" id="steps"></div>
     </div>
 
@@ -685,57 +779,33 @@ function renderCase(){
       <p class="notdone">${c.notdone}</p>
     </div>`;
 
-  document.getElementById('btn-prev').addEventListener('click', ()=>{ stopPlay(); showAll=false; cursor=Math.max(0,cursor-1); renderSteps(); });
-  document.getElementById('btn-next').addEventListener('click', ()=>{ stopPlay(); step(); });
-  document.getElementById('btn-play').addEventListener('click', togglePlay);
-  document.getElementById('btn-all').addEventListener('click', ()=>{ stopPlay(); showAll=!showAll; if(showAll) cursor=c.steps.length-1; renderSteps(); });
   renderSteps();
 }
 
 function renderSteps(){
   const c = CASES[active];
   const wrap = document.getElementById('steps');
-  wrap.className = 'steps' + (showAll ? ' all' : '');
-  wrap.innerHTML = c.steps.map((s,i)=>{
-    const on = showAll || i<=cursor;
-    const gap = dayGap(c.anchor, s.d);
-    const gapLabel = gap===0 ? 'laying day' : (gap<0 ? Math.abs(gap)+' days before' : 'day '+gap);
+  wrap.innerHTML = c.steps.map(s=>{
+    let dayCell;
+    if(!s.d){
+      dayCell = '<b>Not yet</b>awaiting';
+    } else {
+      const gap = dayGap(c.anchor, s.d);
+      const gapLabel = gap===0 ? 'laying day' : (gap<0 ? Math.abs(gap)+' days before' : 'day '+gap);
+      dayCell = `<b>${fmtDate(s.d)}</b>${s.soon?'planned':gapLabel}`;
+    }
     return `
-      <div class="step ${on?'on':''} ${(!showAll && i===cursor)?'cur':''} ${s.tag} ${s.pivot?'pivot':''}">
-        <div class="s-day"><b>${fmtDate(s.d)}</b>${gapLabel}</div>
+      <div class="step ${s.tag} ${s.pivot?'pivot':''} ${s.soon?'soon':''}">
+        <div class="s-day">${dayCell}</div>
         <div class="s-rail"><span class="s-dot"></span></div>
         <div class="s-body">
           <div class="s-what">${s.t}</div>
-          <div class="s-tags"><span class="tag ${s.tag}">${TAGNAME[s.tag]}</span>${s.pivot?'<span class="tag gov">Key moment</span>':''}</div>
+          <div class="s-tags">${s.soon?'<span class="tag soon">Still to come</span>':''}<span class="tag ${s.tag}">${TAGNAME[s.tag]}</span>${(s.pivot && !s.soon)?'<span class="tag gov">Key moment</span>':''}</div>
           ${s.why?`<p class="s-why">${s.why}</p>`:''}
           ${s.link?`<a class="s-link" href="${s.link}" target="_blank" rel="noopener">See the source document &#8599;</a>`:''}
         </div>
       </div>`;
   }).join('');
-
-  const pct = showAll ? 100 : ((cursor+1)/c.steps.length)*100;
-  document.getElementById('bar').style.width = pct+'%';
-  document.getElementById('btn-prev').disabled = showAll || cursor===0;
-  document.getElementById('btn-next').disabled = !showAll && cursor>=c.steps.length-1;
-  document.getElementById('btn-all').textContent = showAll ? 'Step through it' : 'Show everything';
-}
-
-function step(){
-  const c = CASES[active];
-  showAll = false;
-  if(cursor < c.steps.length-1){ cursor++; renderSteps(); return true; }
-  renderSteps(); return false;
-}
-function togglePlay(){
-  if(timer){ stopPlay(); return; }
-  showAll = false; cursor = 0; renderSteps();
-  document.getElementById('btn-play').textContent = 'Pause';
-  timer = setInterval(()=>{ if(!step()) stopPlay(); }, 2600);
-}
-function stopPlay(){
-  if(timer){ clearInterval(timer); timer = null; }
-  const b = document.getElementById('btn-play');
-  if(b) b.textContent = 'Auto-play';
 }
 
 drawChart();
