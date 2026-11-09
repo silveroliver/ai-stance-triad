@@ -62,6 +62,7 @@ table{border-collapse:collapse;width:100%}
 .cov tbody th{text-align:left;padding:0 12px;font-weight:500;font-size:13px;white-space:nowrap;position:sticky;left:0;background:var(--card);z-index:1}
 .c-done{background:var(--pitch);color:var(--card);font-weight:600;font-size:13px}
 .c-wait{background:var(--wait-soft);color:var(--wait);font-weight:600;font-size:13px;box-shadow:inset 0 0 0 2px var(--wait)}
+.c-db{background:var(--pitch-soft);color:var(--pitch);font-weight:600;font-size:13px}
 .c-mix{background:linear-gradient(135deg,var(--pitch) 50%,var(--wait-soft) 50%);color:var(--card);font-weight:600;font-size:12px}
 .cov td.gap{background:var(--rule2)}
 .cov td.c-exp{background:repeating-linear-gradient(135deg,transparent 0 4px,var(--wait-soft) 4px 8px)}
@@ -140,7 +141,7 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--rule);paddin
 <div class="tile"><div class="v">0</div><div class="l">Scorebook cards waiting to be read</div><div class="d">no change since 8 Nov</div><svg class="spark" width="120" height="26" viewBox="0 0 120 26" aria-hidden="true"><polyline points="3.0,22.0 19.3,22.0 35.6,22.0 51.9,22.0 68.1,22.0 84.4,22.0 100.7,22.0 117.0,22.0" fill="none" stroke="var(--pitch)" stroke-width="2" stroke-linejoin="round"/><circle cx="117.0" cy="22.0" r="3" fill="var(--pitch)"/></svg></div>
 </div>
 </section>
-<section><div class="sec-head"><h2>Seasons and teams</h2><p>One square per team per season. Blue squares show matches transcribed; amber shows cards in Drive still to read.</p></div>
+<section><div class="sec-head"><h2>Seasons and teams</h2><p>One square per team per season, counting every match in the database. Dark blue is from the scorebooks, light blue from Play-Cricket and CricketArchive; amber shows scorebook cards in Drive still to read.</p></div>
 <div class="scroll"><table class="cov"><thead><tr><th></th>
 <th class="" scope="col">1946</th>
 <th scope="col" title="Season folders with nothing in them yet">1947-70</th>
@@ -172,9 +173,26 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--rule);paddin
 <th class="has exp" scope="col" title="Book to come: 1997 (other teams)">1997</th>
 <th scope="col" title="Season folders with nothing in them yet">1998</th>
 <th class="has" scope="col">1999</th>
-<th class=" exp" scope="col" title="Book to come: 2011">2011</th>
+<th class="has" scope="col">2001</th>
+<th class="has" scope="col">2002</th>
+<th class="has" scope="col">2003</th>
+<th class="has" scope="col">2004</th>
+<th class="has" scope="col">2005</th>
+<th class="has" scope="col">2006</th>
+<th class="has" scope="col">2007</th>
+<th class="has" scope="col">2008</th>
+<th class="has" scope="col">2009</th>
+<th class="has" scope="col">2010</th>
+<th class="has exp" scope="col" title="Book to come: 2011">2011</th>
+<th class="has" scope="col">2012</th>
+<th class="has" scope="col">2013</th>
+<th class="has" scope="col">2014</th>
 <th class="has" scope="col">2015</th>
+<th class="has" scope="col">2016</th>
+<th class="has" scope="col">2017</th>
 <th class="has" scope="col">2018</th>
+<th class="has" scope="col">2019</th>
+<th class="has" scope="col">2020</th>
 </tr></thead><tbody>
 <tr><th scope="row">1st XI</th>
 <td class="c-empty" title="1st XI, 1946: folder made, no cards yet"></td>
@@ -207,9 +225,26 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--rule);paddin
 <td class="c-exp" title="1st XI, 1997: book to come"></td>
 <td class="gap"></td>
 <td class="c-done" title="1st XI, 1999: 5 matches transcribed">5</td>
-<td class="c-exp" title="1st XI, 2011: book to come"></td>
-<td></td>
-<td class="c-done" title="1st XI, 2018: 1 matches transcribed">1</td>
+<td class="c-db" title="1st XI, 2001: 6 from Play-Cricket or CricketArchive">6</td>
+<td class="c-db" title="1st XI, 2002: 19 from Play-Cricket or CricketArchive">19</td>
+<td class="c-db" title="1st XI, 2003: 19 from Play-Cricket or CricketArchive">19</td>
+<td class="c-db" title="1st XI, 2004: 20 from Play-Cricket or CricketArchive">20</td>
+<td class="c-db" title="1st XI, 2005: 24 from Play-Cricket or CricketArchive">24</td>
+<td class="c-db" title="1st XI, 2006: 25 from Play-Cricket or CricketArchive">25</td>
+<td class="c-db" title="1st XI, 2007: 26 from Play-Cricket or CricketArchive">26</td>
+<td class="c-db" title="1st XI, 2008: 24 from Play-Cricket or CricketArchive">24</td>
+<td class="c-db" title="1st XI, 2009: 24 from Play-Cricket or CricketArchive">24</td>
+<td class="c-db" title="1st XI, 2010: 25 from Play-Cricket or CricketArchive">25</td>
+<td class="c-db" title="1st XI, 2011: 23 from Play-Cricket or CricketArchive">23</td>
+<td class="c-db" title="1st XI, 2012: 22 from Play-Cricket or CricketArchive">22</td>
+<td class="c-db" title="1st XI, 2013: 19 from Play-Cricket or CricketArchive">19</td>
+<td class="c-db" title="1st XI, 2014: 18 from Play-Cricket or CricketArchive">18</td>
+<td class="c-db" title="1st XI, 2015: 20 from Play-Cricket or CricketArchive">20</td>
+<td class="c-db" title="1st XI, 2016: 21 from Play-Cricket or CricketArchive">21</td>
+<td class="c-db" title="1st XI, 2017: 19 from Play-Cricket or CricketArchive">19</td>
+<td class="c-db" title="1st XI, 2018: 22 from Play-Cricket or CricketArchive, 1 from the scorebooks">23</td>
+<td class="c-db" title="1st XI, 2019: 21 from Play-Cricket or CricketArchive">21</td>
+<td class="c-db" title="1st XI, 2020: 12 from Play-Cricket or CricketArchive">12</td>
 </tr>
 <tr><th scope="row">2nd XI</th>
 <td class="c-empty" title="2nd XI, 1946: folder made, no cards yet"></td>
@@ -242,9 +277,26 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--rule);paddin
 <td class="c-exp" title="2nd XI, 1997: book to come"></td>
 <td class="gap"></td>
 <td></td>
-<td class="c-exp" title="2nd XI, 2011: book to come"></td>
-<td></td>
-<td></td>
+<td class="c-db" title="2nd XI, 2001: 1 from Play-Cricket or CricketArchive">1</td>
+<td class="c-db" title="2nd XI, 2002: 17 from Play-Cricket or CricketArchive">17</td>
+<td class="c-db" title="2nd XI, 2003: 16 from Play-Cricket or CricketArchive">16</td>
+<td class="c-db" title="2nd XI, 2004: 18 from Play-Cricket or CricketArchive">18</td>
+<td class="c-db" title="2nd XI, 2005: 18 from Play-Cricket or CricketArchive">18</td>
+<td class="c-db" title="2nd XI, 2006: 18 from Play-Cricket or CricketArchive">18</td>
+<td class="c-db" title="2nd XI, 2007: 18 from Play-Cricket or CricketArchive">18</td>
+<td class="c-db" title="2nd XI, 2008: 20 from Play-Cricket or CricketArchive">20</td>
+<td class="c-db" title="2nd XI, 2009: 21 from Play-Cricket or CricketArchive">21</td>
+<td class="c-db" title="2nd XI, 2010: 21 from Play-Cricket or CricketArchive">21</td>
+<td class="c-db" title="2nd XI, 2011: 20 from Play-Cricket or CricketArchive">20</td>
+<td class="c-db" title="2nd XI, 2012: 19 from Play-Cricket or CricketArchive">19</td>
+<td class="c-db" title="2nd XI, 2013: 16 from Play-Cricket or CricketArchive">16</td>
+<td class="c-db" title="2nd XI, 2014: 18 from Play-Cricket or CricketArchive">18</td>
+<td class="c-db" title="2nd XI, 2015: 18 from Play-Cricket or CricketArchive">18</td>
+<td class="c-db" title="2nd XI, 2016: 16 from Play-Cricket or CricketArchive">16</td>
+<td class="c-db" title="2nd XI, 2017: 16 from Play-Cricket or CricketArchive">16</td>
+<td class="c-db" title="2nd XI, 2018: 16 from Play-Cricket or CricketArchive">16</td>
+<td class="c-db" title="2nd XI, 2019: 18 from Play-Cricket or CricketArchive">18</td>
+<td class="c-db" title="2nd XI, 2020: 10 from Play-Cricket or CricketArchive">10</td>
 </tr>
 <tr><th scope="row">3rd XI</th>
 <td class="c-empty" title="3rd XI, 1946: folder made, no cards yet"></td>
@@ -277,7 +329,24 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--rule);paddin
 <td class="c-exp" title="3rd XI, 1997: book to come"></td>
 <td class="gap"></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td class="c-exp" title="3rd XI, 2011: book to come"></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -312,7 +381,24 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--rule);paddin
 <td class="c-done" title="Sunday 1st XI, 1997: 17 matches transcribed">17</td>
 <td class="gap"></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td class="c-exp" title="Sunday 1st XI, 2011: book to come"></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -347,7 +433,24 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--rule);paddin
 <td class="c-exp" title="Sunday 2nd XI, 1997: book to come"></td>
 <td class="gap"></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td class="c-exp" title="Sunday 2nd XI, 2011: book to come"></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 </tr>
@@ -382,12 +485,29 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--rule);paddin
 <td class="c-exp" title="Festival and other, 1997: book to come"></td>
 <td class="gap"></td>
 <td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 <td class="c-exp" title="Festival and other, 2011: book to come"></td>
+<td></td>
+<td></td>
+<td></td>
 <td class="c-done" title="Festival and other, 2015: 1 matches transcribed">1</td>
+<td></td>
+<td></td>
 <td class="c-done" title="Festival and other, 2018: 1 matches transcribed">1</td>
+<td></td>
+<td></td>
 </tr>
 </tbody></table></div>
-<div class="legend"><span><i class="sw" style="background:var(--pitch)"></i>Matches transcribed</span><span><i class="sw" style="background:var(--wait-soft);box-shadow:inset 0 0 0 2px var(--wait)"></i>Cards waiting</span><span><i class="sw" style="background:linear-gradient(135deg,var(--pitch) 50%,var(--wait-soft) 50%)"></i>Some of each</span><span><i class="sw" style="border-radius:50%;border:1.5px solid var(--void);width:8px;height:8px"></i>Folder made, empty</span><span><i class="sw" style="box-shadow:inset 0 0 0 1.5px var(--wait);border-radius:2px;background:repeating-linear-gradient(135deg,transparent 0 3px,var(--wait-soft) 3px 6px)"></i>Book to come (not yet scanned)</span><span>Grey columns are season folders with nothing in them yet.</span></div></section>
+<div class="legend"><span><i class="sw" style="background:var(--pitch)"></i>From the scorebooks</span><span><i class="sw" style="background:var(--pitch-soft);box-shadow:inset 0 0 0 1px var(--pitch)"></i>From Play-Cricket or CricketArchive</span><span><i class="sw" style="background:var(--wait-soft);box-shadow:inset 0 0 0 2px var(--wait)"></i>Cards waiting</span><span><i class="sw" style="background:linear-gradient(135deg,var(--pitch) 50%,var(--wait-soft) 50%)"></i>Some of each</span><span><i class="sw" style="border-radius:50%;border:1.5px solid var(--void);width:8px;height:8px"></i>Folder made, empty</span><span><i class="sw" style="box-shadow:inset 0 0 0 1.5px var(--wait);border-radius:2px;background:repeating-linear-gradient(135deg,transparent 0 3px,var(--wait-soft) 3px 6px)"></i>Book to come (not yet scanned)</span><span>Grey columns are season folders with nothing in them yet.</span></div></section>
 <section><div class="sec-head"><h2>Waiting and to do</h2><p>Cards in Drive not yet read, scans that need redoing, and housekeeping from the season notes.</p></div><div class="cols">
 <div><h3>Not yet read</h3><ul class="list">
 <li><span>Nothing waiting.</span></li>
@@ -1592,19 +1712,4 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--rule);paddin
 <tr><td class="num">2020</td><td class="n">12</td><td class="note num">4-7-0</td><td class="n">10</td><td class="note num">4-5-0</td></tr>
 </tbody></table></div><p class="note">Play-Cricket matches per season, with Lewes won-lost-drawn (abandoned games are counted in the total). Scorebook seasons are in the grid above. The same player can appear twice, once from the books and once from Play-Cricket, until the links are confirmed through the questions workbook.</p></section>
 <section><div class="sec-head"><h2>Batting and bowling</h2><p>Lewes figures from the Play-Cricket scorecards, Saturday 1st and 2nd XI, 2001 to 2020. Figures from the old scorebooks come with pass 2.</p></div><div class="rb">
-<div><h3>Highest scores</h3><ol><li><span class="big">267</span><span>Calum Waters, 2nd XI v Denton<br><span class="ctx">6 Jul 2019</span></span></li><li><span class="big">180</span><span>Dhanush Thiagaraj, 2nd XI v Lewes St Michaels<br><span class="ctx">22 Jun 2019</span></span></li><li><span class="big">160</span><span>Nick Seager, 1st XI v Haywards Heath<br><span class="ctx">17 Jul 2010</span></span></li><li><span class="big">140*</span><span>David Tungate, 2nd XI v Birdham<br><span class="ctx">26 Jun 2010</span></span></li><li><span class="big">138</span><span>Calum Waters, 2nd XI v Goring<br><span class="ctx">13 Aug 2011</span></span></li><li><span class="big">135</span><span>Imran Khan, 1st XI v Hailsham<br><span class="ctx">26 Aug 2017</span></span></li><li><span class="big">132</span><span>Nick Seager, 1st XI v Glynde and Beddingham<br><span class="ctx">21 Aug 2010</span></span></li><li><span class="big">128</span><span>Kashif Ibrahim, 1st XI v Haywards Heath<br><span class="ctx">28 Jun 2003</span></span></li><li><span class="big">127*</span><span>Richard Eborn, 2nd XI v Billingshurst<br><span class="ctx">3 Jul 2010</span></span></li><li><span class="big">124</span><span>Adnan Raza, 1st XI v Three Bridges<br><span class="ctx">11 Jul 2009</span></span></li></ol></div>
-<div><h3>Best bowling</h3><ol><li><span class="big">8-29</span><span>Adam Scott, 1st XI v Seaford<br><span class="ctx">28 Jul 2012</span></span></li><li><span class="big">8-31</span><span>Sher Khanagha, 1st XI v Haywards Heath<br><span class="ctx">21 Jun 2003</span></span></li><li><span class="big">8-39</span><span>Amit Jaggernauth, 1st XI v Haywards Heath<br><span class="ctx">8 Jul 2006</span></span></li><li><span class="big">7-14</span><span>Tom Sharp, 1st XI v Hellingly<br><span class="ctx">9 Jun 2012</span></span></li><li><span class="big">7-16</span><span>Michael Murray, 1st XI v Roffey<br><span class="ctx">30 Aug 2008</span></span></li><li><span class="big">7-23</span><span>Charles Johnson, 2nd XI v Uckfield Anderida<br><span class="ctx">11 Jun 2016</span></span></li><li><span class="big">7-38</span><span>Kashif Ibrahim, 1st XI v St James&#x27;s Montefiore<br><span class="ctx">30 Aug 2003</span></span></li><li><span class="big">7-44</span><span>Ian Newman, 2nd XI v Chichester Priory Park<br><span class="ctx">12 Jun 2004</span></span></li><li><span class="big">7-46</span><span>Michael Murray, 1st XI v Pulborough<br><span class="ctx">17 May 2008</span></span></li><li><span class="big">7-47</span><span>Kashif Ibrahim, 1st XI v Cuckfield<br><span class="ctx">3 May 2003</span></span></li></ol></div>
-<div><h3>Most runs</h3><ol><li><span class="big num">5,073</span><span>Imran Khan</span></li><li><span class="big num">3,967</span><span>Michael Murray</span></li><li><span class="big num">3,950</span><span>James Cruickshank</span></li><li><span class="big num">3,824</span><span>Richard Eborn</span></li><li><span class="big num">2,467</span><span>Andrew Hartridge</span></li><li><span class="big num">2,280</span><span>Richard Seager</span></li><li><span class="big num">2,247</span><span>Mark Bartholomew</span></li><li><span class="big num">2,020</span><span>Chris Baker</span></li><li><span class="big num">1,883</span><span>Nick Walters</span></li><li><span class="big num">1,639</span><span>Josh Harrison</span></li></ol></div>
-<div><h3>Most wickets</h3><ol><li><span class="big num">331</span><span>Imran Khan</span></li><li><span class="big num">210</span><span>Michael Murray</span></li><li><span class="big num">108</span><span>Duncan Bain</span></li><li><span class="big num">103</span><span>James Cruickshank</span></li><li><span class="big num">96</span><span>Ian Newman</span></li><li><span class="big num">92</span><span>Ahtesham Ali</span></li><li><span class="big num">86</span><span>Amit Jaggernauth</span></li><li><span class="big num">83</span><span>Adam De Belder</span></li><li><span class="big num">82</span><span>Christopher Dacey</span></li><li><span class="big num">78</span><span>Adam Scott</span></li></ol></div>
-</div><p class="note">38 hundreds and 105 five-wicket hauls in these matches. * not out.</p></section>
-<footer>Generated 9 Nov 2026 by <span class="mono">_system/tools/dashboard.py</span> from the pass 1 data in Archive collective. Names and roles only. Readings marked (?) are uncertain.</footer></div>
-<script>
-(function(){
- var s=document.getElementById('qs-season'),t=document.getElementById('qs-type'),st=document.getElementById('qs-status'),q=document.getElementById('qs-q'),c=document.getElementById('qs-count');
- var items=[].slice.call(document.querySelectorAll('#qs-list li'));
- function run(){var n=0,qq=q.value.trim().toLowerCase();items.forEach(function(li){var ok=(!s.value||li.dataset.season===s.value)&&(!t.value||li.dataset.type===t.value)&&(!st.value||li.dataset.status===st.value)&&(!qq||li.textContent.toLowerCase().indexOf(qq)>-1);li.hidden=!ok;if(ok)n++;});c.textContent=n+' shown';}
- [s,t,st].forEach(function(e){e.addEventListener('change',run)});q.addEventListener('input',run);run();
-})();
-</script>
-</body>
-</html>
+<div><h3>Highest scores</h3><ol><li><span class="big">267</span><span>Calum Waters, 2nd XI v Denton<br><span class="ctx">6 Jul 2019</span></span></li><li><span class="big">180</span><span>Dhanush Thiagaraj, 2nd 
